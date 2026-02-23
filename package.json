@@ -1,0 +1,10 @@
+{
+  "name": "giesbert",
+  "version": "0.1.0",
+  "description": "Smart plant watering system",
+  "main": "index.js",
+  "author": "Michael Schwarz",
+  "private": true,
+  "license": "AGPL-3.0",
+  "packageManager": "pnpm@10.30.1"
+}

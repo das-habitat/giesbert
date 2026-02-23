@@ -1,0 +1,34 @@
+{
+  "name": "app-shared",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsup"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./dtos": {
+      "types": "./dist/dtos/index.d.ts",
+      "import": "./dist/dtos/index.mjs",
+      "require": "./dist/dtos/index.js"
+    },
+    "./enums": {
+      "types": "./dist/enums.d.ts",
+      "import": "./dist/enums.mjs",
+      "require": "./dist/enums.js"
+    }
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
