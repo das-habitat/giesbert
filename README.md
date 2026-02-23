@@ -1,5 +1,7 @@
 # Giesbert
 
+<img alt="giesbert-logo" src="./.docs/giesbert-logo.svg" width="auto" height="100px"></img>
+
 ## Software
 
 Fullstack TypeScript with Nest and React.
