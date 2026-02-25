@@ -1,0 +1,7 @@
+.idea
+.claude
+
+# compiled output
+/dist
+/node_modules
+/build
