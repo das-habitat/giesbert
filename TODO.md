@@ -7,3 +7,4 @@
 [ ] Implement BE
 [ ] Implement FE
 [ ] Refactor `/hardware/giesbert.ino`
+[ ] Setup subdomain `giesbert.das-habitat.de`
