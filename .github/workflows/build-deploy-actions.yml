@@ -33,6 +33,9 @@ jobs:
       - run: corepack enable && corepack prepare pnpm@10.29.3 --activate
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter app-shared run build
+      - run: pnpm --filter app-server exec prisma generate
+        env:
+          DATABASE_URL: postgresql://localhost:5432/dummy
       - run: pnpm --filter app-server run lint
 
   test_server:
