@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  email         String   @id
+  nickname      String
+  createdAt     DateTime @default(now())
+  subscriptions Subscription[]
+  channels      UsersOnChannels[]
+  notifications Notification[]
+}
+
+model Subscription {
+  id        String   @id @default(cuid())
+  data      Json
+  counter   Int      @default(0)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userRef], references: [email])
+  userRef   String
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  author    String
+  channel   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userRef], references: [email])
+  userRef   String
+}
+
+model Channel {
+  name      String   @id
+  createdAt DateTime @default(now())
+  users     UsersOnChannels[]
+}
+
+model UsersOnChannels {
+  user       User    @relation(fields: [userRef], references: [email])
+  channel    Channel @relation(fields: [channelRef], references: [name])
+  userRef    String
+  channelRef String
+
+  @@id([userRef, channelRef])
+}

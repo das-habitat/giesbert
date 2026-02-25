@@ -1,4 +1,94 @@
-# server.Dockerfile
-# pwa.Dockerfile
-# PostgreSQL
-# containrrr/shepherd
+services:
+
+  pwa:
+    image: ghcr.io/das-habitat/giesbert/pwa:latest
+    environment:
+      - SITE_ADDRESS=${SITE_ADDRESS}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - caddy_net
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+      labels:
+        - shepherd.enable=true
+
+  server:
+    image: ghcr.io/das-habitat/giesbert/server:latest
+    env_file:
+      - .env.prod
+    networks:
+      - caddy_net
+      - server_net
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+      labels:
+        - shepherd.enable=true
+
+  db:
+    image: postgres:18
+    volumes:
+      - giesbert-db:/var/lib/postgresql
+    env_file:
+      - .env.prod
+    networks:
+      - server_net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+
+  shepherd:
+    image: containrrr/shepherd:v1.8.1
+    environment:
+      - SLEEP_TIME=5m
+      - WITH_REGISTRY_AUTH=true
+      - ROLLBACK_ON_FAILURE=true
+      - IGNORELIST_SERVICES=""
+      - REGISTRY_USER=${REGISTRY_USER}
+      - REGISTRY_PASSWORD=${REGISTRY_PASSWORD}
+      - REGISTRY_HOST=ghcr.io
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 10
+
+volumes:
+  giesbert-db:
+  caddy_data:
+  caddy_config:
+
+networks:
+  caddy_net:
+    driver: overlay
+  server_net:
+    driver: overlay
+    internal: true
