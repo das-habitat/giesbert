@@ -1,3 +1,7 @@
+variable "REGISTRY" {
+  default = "ghcr.io/das-habitat/giesbert"
+}
+
 variable "TAG" {
   default = "latest"
 }
@@ -14,8 +18,8 @@ target "server" {
   dockerfile = "deployment/server.Dockerfile"
   platform   = ["linux/amd64"]
   tags = [
-    "giesbert/server:${TAG}",
-    "giesbert/server:latest"
+    "${REGISTRY}/server:${TAG}",
+    "${REGISTRY}/server:latest"
   ]
 }
 
@@ -24,7 +28,7 @@ target "pwa" {
   dockerfile = "deployment/pwa.Dockerfile"
   platform   = ["linux/amd64"]
   tags = [
-    "giesbert/pwa:${TAG}",
-    "giesbert/pwa:latest"
+    "${REGISTRY}/pwa:${TAG}",
+    "${REGISTRY}/pwa:latest"
   ]
 }
