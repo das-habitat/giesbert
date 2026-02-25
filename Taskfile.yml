@@ -1,1 +1,50 @@
-# TODO
+version: "3"
+
+tasks:
+  install:
+    desc: Install all dependencies and generate Prisma client
+    cmds:
+      - pnpm install
+      - task: db:client
+
+  dev:
+    desc: Start all services for local development
+    deps:
+      - task: dev:server
+      - task: dev:pwa
+
+  dev:pwa:
+    desc: Start PWA dev server
+    dir: app-pwa
+    cmd: pnpm dev
+
+  dev:server:
+    desc: Start server in watch mode
+    deps:
+      - task: dev:db
+    cmds:
+      - task: db:migrate
+      - pnpm start:dev
+    dir: app-server
+
+  dev:db:
+    desc: Start local Postgres via Docker Compose and wait until ready
+    dir: app-server
+    cmds:
+      - docker compose -f postgres.docker-compose.yml up -d
+      - docker compose -f postgres.docker-compose.yml exec db sh -c 'until pg_isready; do sleep 1; done'
+
+  dev:db:stop:
+    desc: Stop local Postgres
+    dir: app-server
+    cmd: docker compose -f postgres.docker-compose.yml down
+
+  db:migrate:
+    desc: Apply pending migrations
+    dir: app-server
+    cmd: pnpm db:migrate
+
+  db:client:
+    desc: Generate Prisma client
+    dir: app-server
+    cmd: npx prisma generate
