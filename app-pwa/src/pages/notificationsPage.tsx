@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Markdown from 'markdown-to-jsx/react';
 import { Copy, Info, LoaderCircle, Plus, Share, TriangleAlert } from 'lucide-react';
-import { Button, Input, Header, Card } from '../_components';
-import { useAccount, useApi, usePushService } from '../_hooks';
+import { Button, Input, Header, Card } from '../modules/common/ui-components';
+import { useAccount, usePushService } from '../modules/notifications/hooks';
+import { useApi } from '../modules/common/clients'
+
 // import { UserNotification } from '@src/app/api/notifications/route';
 import PWABadge from '../PWABadge.tsx'
 

@@ -1,7 +1,4 @@
 @import 'tailwindcss';
-@import "@fontsource/noto-sans.css";
-@import "@fontsource/noto-sans-mono.css";
-@import "@fontsource/jersey-15/400.css";
 
 :root {
     --background: #bad7de;

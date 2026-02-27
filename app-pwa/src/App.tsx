@@ -2,7 +2,10 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import NotificationsPage from './_pages/notificationsPage.tsx'
+import NotificationsPage from './pages/notificationsPage.tsx'
+import "@fontsource-variable/noto-sans";
+import "@fontsource-variable/noto-sans-mono";
+import "@fontsource/jersey-15/400.css";
 
 const queryClient = new QueryClient()
 

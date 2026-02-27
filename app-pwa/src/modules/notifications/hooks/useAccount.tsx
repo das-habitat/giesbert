@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useApi, usePushService } from '../_hooks';
+import { useApi } from '../../common/clients';
+import { usePushService } from './';
 
 export default function useAccount() {
     const { useUser, upsertUser, removeUser } = useApi();
