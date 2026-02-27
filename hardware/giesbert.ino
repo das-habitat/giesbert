@@ -7,9 +7,9 @@
 // 2. https://wiki.seeedstudio.com/xiao_esp32c6_getting_started
 
 // ========== PIN CONFIGURATION ==========
-#define MOISTURE_PIN A1;
-#define BATTERY_PIN A0;
-#define SENSOR_POWER_PIN D10;
+#define MOISTURE_PIN A1
+#define BATTERY_PIN A0
+#define SENSOR_POWER_PIN D10
 
 // ========== MEASUREMENT SETTINGS ==========
 #define TIME_TO_SLEEP 3600 // 300 = 5 minutes, 3600 = 1 hour
@@ -17,16 +17,16 @@
 RTC_DATA_ATTR int bootCount = 0;
 
 // ========== DEVICE SETTINGS ==========
-#define DEVICE_NAME "Pflanze001";
-#define AP_ID "Pflanze001";
-#define DEVICE_UUID "b3e839ee"; // first 8 symbols by https://www.uuidgenerator.net/version4
-#define PORTAL_TIMEOUT 120; // 120 = 2 minutes
+#define DEVICE_NAME "Pflanze001"
+#define AP_ID "Pflanze001"
+#define DEVICE_UUID "b3e839ee" // first 8 symbols by https://www.uuidgenerator.net/version4
+#define PORTAL_TIMEOUT 120 // 120 = 2 minutes
 
 // ========== API SETTINGS ==========
 // Push Notifications (optional)
-#define PUSH_API "https://giesbert.das-habitat.de/api/notifications?action=send";
-#define USER_REF "changemepls@mail.de";
-#define CHANNEL_REF "changemepls";
+#define PUSH_API "https://giesbert.das-habitat.de/api/notifications?action=send"
+#define USER_REF "changemepls@mail.de"
+#define CHANNEL_REF "changemepls"
 
 // ========== FUNCTIONS ==========
 #define MAX_VALUES 24

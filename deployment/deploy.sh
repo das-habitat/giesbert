@@ -5,6 +5,15 @@ STACK_NAME="giesbert"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STACK_FILE="$SCRIPT_DIR/docker-stack.yml"
 
+# --- Load .env.deploy ---
+if [[ ! -f "$SCRIPT_DIR/.env.deploy" ]]; then
+  echo "Error: $SCRIPT_DIR/.env.deploy not found." >&2
+  exit 1
+fi
+set -a
+source "$SCRIPT_DIR/.env.deploy"
+set +a
+
 # --- Preflight checks ---
 if ! docker info &>/dev/null; then
   echo "Error: Docker daemon is not running." >&2
