@@ -4,10 +4,10 @@ import { NotificationsService } from './notifications.service';
 
 @Injectable()
 export class NotificationsScheduler {
-    constructor(private readonly notificationsService: NotificationsService) {}
+  constructor(private readonly notificationsService: NotificationsService) {}
 
-    @Cron('0 1 * * *') // every day at 1 AM
-    async handleCron() {
-        await this.notificationsService.deleteOldNotifications();
-    }
+  @Cron('0 1 * * *') // every day at 1 AM
+  async handleCron() {
+    await this.notificationsService.deleteOldNotifications();
+  }
 }

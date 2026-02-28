@@ -5,6 +5,6 @@ import { NotificationsScheduler } from './notifications.scheduler';
 
 @Module({
   controllers: [NotificationsController],
-  providers: [NotificationsService, NotificationsScheduler]
+  providers: [NotificationsService, NotificationsScheduler],
 })
 export class NotificationsModule {}
