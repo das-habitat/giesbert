@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class NotificationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async deleteOldNotifications() {
     const maxLifetime = 2 * 24 * 60 * 60 * 1000; // 2 days
@@ -68,7 +68,7 @@ export class NotificationsService {
     // Try to send Web Push Notifications
     webpush.setVapidDetails(
       process.env.SITE_ADDRESS!,
-      process.env.VITE_VAPID_PUBLIC_KEY!,
+      process.env.VAPID_PUBLIC_KEY!,
       process.env.VAPID_PRIVATE_KEY!,
     );
     const subscriptions = channel.users.flatMap(
