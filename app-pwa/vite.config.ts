@@ -15,10 +15,51 @@ export default defineConfig({
     },
 
     manifest: {
-      name: 'app-pwa',
-      short_name: 'app-pwa',
-      description: 'app-pwa',
-      theme_color: '#ffffff',
+      name: 'Sprechender Blumentopf [giesbert]',
+      short_name: 'giesbert',
+      description: 'A smart plant project.',
+      start_url: '/',
+      scope: '/',
+      display: 'standalone',
+      background_color: '#bad7de',
+      theme_color: '#bad7de',
+      lang: 'de',
+      icons: [
+        {
+          src: '/icon-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+          purpose: 'maskable',
+        },
+        {
+          src: '/icon-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+          purpose: 'any',
+        },
+        {
+          src: '/icon-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable',
+        },
+        {
+          src: '/icon-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any',
+        },
+        {
+          src: '/icon.svg',
+          type: 'image/svg+xml',
+          purpose: 'maskable',
+        },
+        {
+          src: '/icon.svg',
+          type: 'image/svg+xml',
+          purpose: 'any',
+        },
+      ],
     },
 
     workbox: {

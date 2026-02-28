@@ -7,8 +7,8 @@ export default function Header({
     >
       <div>
         <img
-          src="/apps/notifications/icon.svg"
-          alt="P15Ns Logo"
+          src="/icon.svg"
+          alt="giesbert logo"
           width={72}
           height={72}
           className="mt-1.5 rounded-xl shrink-0"

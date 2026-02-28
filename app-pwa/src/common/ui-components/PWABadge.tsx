@@ -1,4 +1,4 @@
-import './PWABadge.css';
+import '../styles/PWABadge.css';
 
 import { useRegisterSW } from 'virtual:pwa-register/react';
 

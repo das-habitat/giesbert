@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Markdown from 'markdown-to-jsx/react';
-import {
-  Copy,
-  Info,
-  LoaderCircle,
-  Plus,
-  Share,
-  TriangleAlert,
-} from 'lucide-react';
+import { Copy, Plus, Share } from 'lucide-react';
 import { Button, Input, Header, Card } from '../common/ui-components';
 import { useAccount, usePushService } from './hooks';
 import { useApi } from '../common/clients';
-
+import { LoaderCard, StatusCard } from './components';
 // import { UserNotification } from '@src/app/api/notifications/route';
-import PWABadge from '../PWABadge.tsx';
 
 type UserNotification = any;
 
@@ -23,7 +15,6 @@ export default function NotificationsPage() {
 
   return (
     <div>
-      <PWABadge />
       <div className="mb-8 text-pretty">
         <Header className="my-24" />
         {isLoading && (
@@ -42,7 +33,7 @@ export default function NotificationsPage() {
                     (notification: UserNotification, idx: number) => (
                       <Card
                         key={idx}
-                        className="bg-red-400 text-pretty"
+                        className="bg-pink-400 text-pretty"
                         size="small"
                       >
                         <p className="text-lg font-bold">
@@ -373,7 +364,7 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
           onChange={(e) => setMessage(e.target.value)}
         />
         <Button
-          className="bg-red-400 text-livid-100 w-56"
+          className="bg-pink-400 text-livid-100 w-56"
           onClick={sendTestNotification}
           disabled={isLoading}
         >
@@ -435,70 +426,20 @@ function SampleSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
       <div className="flex justify-between items-start">
         <h3 className="font-bold text-xl mb-4">Beispiel-Code</h3>
         <button type="button" onClick={copyCode}>
-          <Copy className="text-red-400 hover:cursor-pointer" />
+          <Copy className="text-pink-400 hover:cursor-pointer" />
         </button>
       </div>
       <div className="mb-6 font-mono text-sm [&_pre]:whitespace-pre-wrap [&_pre]:overflow-x-auto [&_code]:break-words]">
         <Markdown>{sampleCode}</Markdown>
       </div>
       <div className="flex justify-center">
-        <Button onClick={copyCode} className="bg-red-400 text-livid-100 w-56">
+        <Button onClick={copyCode} className="bg-pink-400 text-livid-100 w-56">
           Code kopieren
         </Button>
       </div>
     </Card>
   );
 }
-
-function StatusCard({
-  data,
-  style = 'warning',
-  icon = 'warning',
-  size = 'small',
-  className,
-}: ErrorCardProps) {
-  return (
-    <Card
-      className={`${style === 'info' ? 'bg-livid-700' : 'bg-red-400'} flex items-start ${className}`}
-      size={size}
-    >
-      {icon === 'info' ? (
-        <Info strokeWidth={3} className="shrink-0 mt-1 mr-2" />
-      ) : (
-        <TriangleAlert strokeWidth={3} className="shrink-0 mt-1 mr-2" />
-      )}
-      <div>
-        <p
-          className={`${size === 'small' ? 'text-xl mb-2' : 'text-2xl mb-4'} font-bold`}
-        >
-          {data?.title || 'Schade Marmelade'}
-        </p>
-        <p>{data.message}</p>
-      </div>
-    </Card>
-  );
-}
-
-function LoaderCard({ className }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <Card
-      className={`absolute top-0 left-0 w-full h-full flex justify-center items-center z-100 text-livid-800 ${className}`}
-    >
-      <LoaderCircle className="animate-spin text-inherit" size={65} />
-    </Card>
-  );
-}
-
-type ErrorCardProps = Readonly<{
-  data: {
-    title?: string;
-    message: string;
-  };
-  icon?: 'warning' | 'info';
-  style?: 'warning' | 'info';
-  size?: 'small' | 'large';
-}> &
-  React.HTMLAttributes<HTMLDivElement>;
 
 type BeforeInstallPromptEvent = {
   prompt(): Promise<void>;

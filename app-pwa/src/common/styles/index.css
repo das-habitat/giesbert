@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@source "../index.html";
 
 :root {
   --background: #bad7de;
@@ -18,7 +19,7 @@
   --color-violet-400: #cbc6d0;
   --color-violet-700: #645b6e;
   --color-violet-900: #403a46;
-  --color-red-400: #fa7061;
+  --color-pink-400: #f9b4ff;
   --color-red-500: #d51407;
 }
 
