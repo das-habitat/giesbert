@@ -4,7 +4,7 @@ import { NotificationAction, type UserMessage } from 'app-shared';
 
 @Controller('notifications')
 export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) { }
+  constructor(private readonly notificationsService: NotificationsService) {}
 
   @Post()
   async handleAction(

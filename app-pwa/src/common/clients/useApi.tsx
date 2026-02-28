@@ -5,6 +5,7 @@ import {
   type UpdateUser,
   type FullUser,
   type User,
+  NotificationAction,
 } from 'app-shared';
 
 const URL_API_NOTIFICATIONS = '/api/notifications';
@@ -56,13 +57,16 @@ export default function useApi() {
 
   const sendMessage = useMutation({
     mutationFn: async (message: UserMessage) => {
-      const res = await fetch(`${URL_API_NOTIFICATIONS}?action=send`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetch(
+        `${URL_API_NOTIFICATIONS}?action=${NotificationAction.send}}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(message),
         },
-        body: JSON.stringify(message),
-      });
+      );
       return handleResponse(res);
     },
   });
