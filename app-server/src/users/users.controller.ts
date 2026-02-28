@@ -7,7 +7,8 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { NewUser, UpdateUser, UsersService } from './users.service';
+import { type NewUser, type UpdateUser } from 'app-shared';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {

@@ -24,7 +24,7 @@ RTC_DATA_ATTR int bootCount = 0;
 
 // ========== API SETTINGS ==========
 // Push Notifications (optional)
-#define PUSH_API "https://giesbert.das-habitat.de/api/notifications?action=send"
+#define PUSH_API "http://localhost:3000/api/notifications?action=send"
 #define USER_REF "changemepls@mail.de"
 #define CHANNEL_REF "changemepls"
 

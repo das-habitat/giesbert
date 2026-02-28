@@ -1,1 +1,3 @@
-export const temp1 = "temp1";
+export enum NotificationAction {
+    send = 'send',
+};

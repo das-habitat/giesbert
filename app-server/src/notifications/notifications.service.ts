@@ -1,17 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import * as z from 'zod';
-import webpush from 'web-push';
+import webpush, { WebPushError } from 'web-push';
+import { type Subscription, type UserMessage } from 'app-shared';
 import { PrismaService } from '../prisma/prisma.service';
-import { Subscription } from '../users/users.service';
-
-const MessageSchema = z.object({
-  userRef: z.email(),
-  channelRef: z.string(),
-  title: z.string().min(1).max(100),
-  body: z.string().min(1).max(500),
-});
-
-export type UserMessage = z.infer<typeof MessageSchema>;
 
 @Injectable()
 export class NotificationsService {
@@ -77,8 +67,8 @@ export class NotificationsService {
     );
     // Try to send Web Push Notifications
     webpush.setVapidDetails(
-      'https://digimunea.de',
-      process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+      process.env.SITE_ADDRESS!,
+      process.env.VITE_VAPID_PUBLIC_KEY!,
       process.env.VAPID_PRIVATE_KEY!,
     );
     const subscriptions = channel.users.flatMap(
@@ -102,13 +92,15 @@ export class NotificationsService {
           result,
           subscription: subscriptions[index],
         }))
-        .filter(
-          ({ result }) =>
-            result.status === 'rejected' &&
-            (result?.reason?.body?.includes('InvalidRegistration') ||
-              result?.reason?.statusCode === 404 ||
-              result?.reason?.statusCode === 410),
-        )
+        .filter(({ result }) => {
+          if (result.status !== 'rejected') return false;
+          const reason = result.reason as WebPushError;
+          return (
+            reason.body.includes('InvalidRegistration') ||
+            reason.statusCode === 404 ||
+            reason.statusCode === 410
+          );
+        })
         .map(({ subscription }) =>
           this.prisma.subscription.delete({
             where: { id: subscription.id },

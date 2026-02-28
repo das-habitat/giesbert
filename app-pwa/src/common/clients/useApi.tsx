@@ -1,11 +1,11 @@
-// import { NewUser, UserMessage, UpdateUser, FullUser, User } from '@src/app/api/notifications/route';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
-type NewUser = any;
-type UserMessage = any;
-type UpdateUser = any;
-type FullUser = any;
-type User = any;
+import {
+  type NewUser,
+  type UserMessage,
+  type UpdateUser,
+  type FullUser,
+  type User,
+} from 'app-shared';
 
 const URL_API_NOTIFICATIONS = '/api/notifications';
 

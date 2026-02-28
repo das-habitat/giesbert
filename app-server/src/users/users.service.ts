@@ -1,38 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import * as z from 'zod';
+import {
+  type NewUser,
+  type UpdateUser,
+  type Subscription,
+  NewUserSchema,
+  UpdateUserSchema,
+} from 'app-shared';
 import { PrismaService } from '../prisma/prisma.service';
-
-const SubscriptionSchema = z.object({
-  endpoint: z.string(),
-  expirationTime: z.number().nullable().optional(),
-  keys: z.object({
-    p256dh: z.string(),
-    auth: z.string(),
-  }),
-});
-
-const UpdateUserSchema = z.object({
-  userRef: z.email(),
-  channels: z.array(z.string()).min(1).max(30).optional(),
-  subscription: SubscriptionSchema.optional(),
-});
-
-const NewUserSchema = z.object({
-  nickname: z.string().min(2).max(20),
-  email: z.email(),
-  channels: z.array(z.string()).min(1).max(30),
-  subscription: SubscriptionSchema,
-});
-
-export type Subscription = z.infer<typeof SubscriptionSchema>;
-export type NewUser = z.infer<typeof NewUserSchema>;
-export type UpdateUser = z.infer<typeof UpdateUserSchema>;
-export type UserNotification = Prisma.NotificationGetPayload<object>;
-export type FullUser = Prisma.UserGetPayload<{
-  include: { channels: true; notifications: true };
-}>;
-export type User = Prisma.UserGetPayload<object>;
 
 @Injectable()
 export class UsersService {

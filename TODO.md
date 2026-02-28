@@ -1,7 +1,7 @@
 # Todo
 
-[ ] Deploy on IONOS
-[ ] Update docs
-[ ] Refactor BE + FE
+[ ] FE: Refactor sw.js
 [ ] Refactor `/hardware/giesbert.ino`
-[ ] Setup subdomain `giesbert.das-habitat.de`
+[ ] FE+BE: Chart (Battery, Moisture)
+[ ] Deploy on IONOS
+[ ] Subdomain `giesbert.das-habitat.de`

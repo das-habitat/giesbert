@@ -28,9 +28,6 @@ importers:
       lucide-react:
         specifier: ^0.575.0
         version: 0.575.0(react@19.2.4)
-      markdown-to-jsx:
-        specifier: ^9.7.6
-        version: 9.7.6(react@19.2.4)
       pnpm:
         specifier: ^10.30.3
         version: 10.30.3
@@ -234,6 +231,9 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
 
 packages:
 
@@ -4077,24 +4077,6 @@ packages:
 
   makeerror@1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
-
-  markdown-to-jsx@9.7.6:
-    resolution: {integrity: sha512-oPckbBhWv/d2HmYzSv68g2UBTONmrFYlqUd+juolxTplJImhDEKFgAEcnxSTeZ1HISKzKxm+mVeUYP7OUhglJQ==}
-    engines: {node: '>= 18'}
-    peerDependencies:
-      react: '>= 16.0.0'
-      react-native: '*'
-      solid-js: '>=1.0.0'
-      vue: '>=3.0.0'
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-native:
-        optional: true
-      solid-js:
-        optional: true
-      vue:
-        optional: true
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -9770,10 +9752,6 @@ snapshots:
   makeerror@1.0.12:
     dependencies:
       tmpl: 1.0.5
-
-  markdown-to-jsx@9.7.6(react@19.2.4):
-    optionalDependencies:
-      react: 19.2.4
 
   math-intrinsics@1.1.0: {}
 

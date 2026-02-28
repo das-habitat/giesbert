@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Markdown from 'markdown-to-jsx/react';
-import { Copy, Plus, Share } from 'lucide-react';
+import { Plus, Share } from 'lucide-react';
+import { type UserNotification } from 'app-shared';
 import { Button, Input, Header, Card } from '../common/ui-components';
 import { useAccount, usePushService } from './hooks';
 import { useApi } from '../common/clients';
 import { LoaderCard, StatusCard } from './components';
-// import { UserNotification } from '@src/app/api/notifications/route';
-
-type UserNotification = any;
 
 export default function NotificationsPage() {
   const { isGranted } = usePushService();
@@ -69,7 +66,6 @@ export default function NotificationsPage() {
             <Card className="bg-livid-400" size="small">
               <h3 className="text-2xl font-bold mb-6">Dein Zugang</h3>
               <TestingSection className="mb-6" />
-              <SampleSection className="mb-6" />
               <AccountSection />
             </Card>
           </>
@@ -369,72 +365,6 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
           disabled={isLoading}
         >
           Testnachricht senden
-        </Button>
-      </div>
-    </Card>
-  );
-}
-
-function SampleSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
-  const { user } = useAccount();
-  const sampleCode = `
-    #include <WiFi.h>
-    #include <HTTPClient.h>
-    #include <WiFiManager.h>  // https://github.com/tzapu/WiFiManager
-
-    char* apiUrl = "https://digimunea.de/api/notifications?action=send";
-    char* userRef = "${user?.email}";
-    char* channelRef = "${user?.channels?.[0]?.channelRef}";
-    char* title = "Testbenachrichtigung";
-    char* body = "Gesendet von deinem IoT-Gerät!";
-
-    void setupWiFi() {}
-    void sendData(float moistureVoltage, float moisturePercent, float batteryVoltage) { 
-        if (WiFi.status() == WL_CONNECTED) { 
-            HTTPClient http; 
-            http.begin(apiUrl);
-            http.addHeader("Content-Type", "application/json");
-            String json = "{";
-            json += "\"userRef\": \"" + String(userRef) + "\",";
-            json += "\"channelRef\": \"" + String(channelRef) + "\",";
-            json += "\"title\": \"" + String(title) + "\",";
-            json += "\"body\": \"" + String(body) + "\",";
-            int httpResponseCode = http.POST(json);
-            Serial.println("Response: " + String(httpResponseCode));        
-            Serial.println("Payload: " + json);
-            http.end();
-        } else { 
-            Serial.println("WiFi not connected, skipping data send.");
-        }
-    }`;
-
-  const copyCode = async () => {
-    try {
-      await navigator.clipboard.writeText(sampleCode);
-      alert('Kopiert & einsatzbereit 🚀');
-    } catch (error) {
-      alert('Oje… Kopieren fehlgeschlagen 😅');
-      console.error('Copy error:', error);
-    }
-  };
-
-  return (
-    <Card
-      className={`mb-6 bg-livid-700 text-livid-100 ${className}`}
-      size="small"
-    >
-      <div className="flex justify-between items-start">
-        <h3 className="font-bold text-xl mb-4">Beispiel-Code</h3>
-        <button type="button" onClick={copyCode}>
-          <Copy className="text-pink-400 hover:cursor-pointer" />
-        </button>
-      </div>
-      <div className="mb-6 font-mono text-sm [&_pre]:whitespace-pre-wrap [&_pre]:overflow-x-auto [&_code]:break-words]">
-        <Markdown>{sampleCode}</Markdown>
-      </div>
-      <div className="flex justify-center">
-        <Button onClick={copyCode} className="bg-pink-400 text-livid-100 w-56">
-          Code kopieren
         </Button>
       </div>
     </Card>
