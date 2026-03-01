@@ -6,8 +6,11 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), VitePWA({
-    registerType: 'prompt',
     injectRegister: false,
+
+    strategies: 'injectManifest',
+    srcDir: 'src',
+    filename: 'sw.ts',
 
     pwaAssets: {
       disabled: false,
@@ -62,10 +65,8 @@ export default defineConfig({
       ],
     },
 
-    workbox: {
+    injectManifest: {
       globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-      cleanupOutdatedCaches: true,
-      clientsClaim: true,
     },
 
     devOptions: {

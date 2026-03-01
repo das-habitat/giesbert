@@ -95,8 +95,20 @@ importers:
       vite-plugin-pwa:
         specifier: ^1.1.0
         version: 1.2.0(@vite-pwa/assets-generator@1.0.2)(vite@7.3.1(@types/node@24.10.13)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.46.0))(workbox-build@7.4.0(@types/babel__core@7.20.5))(workbox-window@7.4.0)
+      workbox-build:
+        specifier: ^7.4.0
+        version: 7.4.0(@types/babel__core@7.20.5)
       workbox-core:
         specifier: ^7.3.0
+        version: 7.4.0
+      workbox-precaching:
+        specifier: ^7.4.0
+        version: 7.4.0
+      workbox-routing:
+        specifier: ^7.4.0
+        version: 7.4.0
+      workbox-strategies:
+        specifier: ^7.4.0
         version: 7.4.0
       workbox-window:
         specifier: ^7.4.0

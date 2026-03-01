@@ -5,8 +5,14 @@ export default function usePushService() {
   const [isGranted, setIsGranted] = useState<NotificationPermission>('default');
 
   useEffect(() => {
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      navigator.standalone === true;
     const isSupported =
-      'serviceWorker' in navigator && 'Notification' in window;
+      isStandalone &&
+      'serviceWorker' in navigator &&
+      'Notification' in window &&
+      'PushManager' in window;
     setIsSupported(isSupported);
     if (isSupported) {
       const permission = Notification.permission;
@@ -27,11 +33,6 @@ export default function usePushService() {
     });
     await navigator.serviceWorker.ready;
     console.log('Service Worker ready:', registration.active);
-    if (!('pushManager' in registration)) {
-      console.log('Push Manager not supported in Service Worker registration.');
-      setIsSupported(false);
-      return;
-    }
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(
