@@ -9,5 +9,13 @@ services:
     volumes:
       - giesbert-db:/var/lib/postgresql/data
 
+# server:
+#   image: ghcr.io/das-habitat/giesbert/server:latest
+#   platform: linux/amd64
+#   env_file:
+#     - .env
+#   depends_on:
+#     - db
+
 volumes:
   giesbert-db:
