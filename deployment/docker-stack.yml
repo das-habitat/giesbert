@@ -28,7 +28,7 @@ services:
   server:
     image: ghcr.io/das-habitat/giesbert/server:latest
     env_file:
-      - .env.prod
+      - .env.deploy
     networks:
       - caddy_net
       - server_net
@@ -49,7 +49,7 @@ services:
     volumes:
       - giesbert-db:/var/lib/postgresql
     env_file:
-      - .env.prod
+      - .env.deploy
     networks:
       - server_net
     deploy:
