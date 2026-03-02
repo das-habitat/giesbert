@@ -146,7 +146,7 @@ void setupWiFi() {
 }
 
 // Push Notifications (optional)
-// Requires that the user has installed the P15Ns PWA: https://notifications.digimunea.de
+// Requires that the user has installed the PWA: https://giesbert.das-habitat.de
 void sendNotification(String message) {
     if (WiFi.status() == WL_CONNECTED) { 
         HTTPClient http;
