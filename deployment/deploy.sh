@@ -41,5 +41,5 @@ echo "  docker stack ps $STACK_NAME"
 # --- Cron Job: Docker Cleanup ---
 CLEANUP_MARKER="# giesbert-docker-cleanup"
 CLEANUP_JOB="0 3 * * * docker container prune -f >> /var/log/docker_cleanup.log 2>&1"
-({ crontab -l 2>/dev/null || true; } | sed "/$CLEANUP_MARKER/d"; echo "$CLEANUP_MARKER"; echo "$CLEANUP_JOB") | crontab -
+({ crontab -l 2>/dev/null || true; } | grep -vF "$CLEANUP_MARKER" | grep -vF "$CLEANUP_JOB"; echo "$CLEANUP_MARKER"; echo "$CLEANUP_JOB") | crontab -
 echo "Cron job giesbert-docker-cleanup installed (runs daily at 03:00)."
