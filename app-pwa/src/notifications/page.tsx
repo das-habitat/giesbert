@@ -50,15 +50,15 @@ export default function NotificationsPage() {
                   data={
                     isGranted !== 'denied'
                       ? {
-                          title: 'Hier piept gerade nichts',
-                          message:
-                            'Schicke dir eine Testnachricht oder nutze den Beispiel-Code, um dir Benachrichtigungen zu schicken.',
-                        }
+                        title: 'Hier piept gerade nichts',
+                        message:
+                          'Schicke dir eine Testnachricht oder nutze den Beispiel-Code, um dir Benachrichtigungen zu schicken.',
+                      }
                       : {
-                          title: 'Schade Marmelade',
-                          message:
-                            'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
-                        }
+                        title: 'Schade Marmelade',
+                        message:
+                          'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
+                      }
                   }
                 />
               )}
@@ -361,7 +361,7 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
           onChange={(e) => setMessage(e.target.value)}
         />
         <Button
-          className="bg-pink-400 text-livid-100 w-56"
+          className="bg-pink-400 text-livid-700 w-56"
           onClick={sendTestNotification}
           disabled={isLoading}
         >
