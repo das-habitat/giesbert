@@ -9,6 +9,7 @@ import {
 } from 'app-shared';
 
 const URL_API_NOTIFICATIONS = '/api/notifications';
+const URL_API_USERS = '/api/users';
 
 export default function useApi() {
   const queryClient = useQueryClient();
@@ -17,7 +18,7 @@ export default function useApi() {
     return useQuery({
       queryKey: ['user'],
       queryFn: async () => {
-        const res = await fetch(`${URL_API_NOTIFICATIONS}?userRef=${userRef}`);
+        const res = await fetch(`${URL_API_USERS}?userRef=${userRef}`);
         const data = await handleResponse(res);
         return data.user as FullUser;
       },
@@ -28,7 +29,7 @@ export default function useApi() {
 
   const upsertUser = useMutation({
     mutationFn: async (newUser: NewUser | UpdateUser) => {
-      const res = await fetch(URL_API_NOTIFICATIONS, {
+      const res = await fetch(URL_API_USERS, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newUser),
@@ -42,7 +43,7 @@ export default function useApi() {
 
   const removeUser = useMutation({
     mutationFn: async (userRef: string) => {
-      const res = await fetch(`${URL_API_NOTIFICATIONS}`, {
+      const res = await fetch(URL_API_USERS, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userRef }),
