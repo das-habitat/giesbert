@@ -76,4 +76,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          echo "VITE_VAPID_PUBLIC_KEY=${{ secrets.VITE_VAPID_PUBLIC_KEY }}" >> app-pwa/.env
+          echo "VITE_SITE_ADDRESS=${{ secrets.VITE_SITE_ADDRESS }}" >> app-pwa/.env
       - run: TAG=${{ github.run_number }} docker buildx bake -f deployment/docker-bake.hcl --push
