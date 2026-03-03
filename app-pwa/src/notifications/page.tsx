@@ -103,7 +103,8 @@ function SetupGuide() {
       <h3 className="text-2xl font-bold mb-4">App installieren</h3>
       <p>
         Damit du Push Notifications senden und erhalten kannst, ist es nötig
-        P15Ns als App zu installieren. Zum Beispiel:
+        diese Webseite als App auf deinem Smartphone zu installieren. Zum
+        Beispiel so:
       </p>
       <Card className="my-4 bg-livid-700 text-livid-100" size="small">
         <p className="font-bold">Android (Chrome)</p>
@@ -148,10 +149,10 @@ function SetupGuide() {
         <Card className="bg-livid-400">
           <h3 className="text-2xl font-bold mb-4">Zugang erstellen</h3>
           <p className="mb-4">
-            Die Nutzung von P15Ns ist kostenlos und nur für private
+            Die Nutzung der giesbert App ist kostenlos und nur für private
             Hobby-Projekte erlaubt. Mit der Erstellung deines Kontos stimmst du
-            diesen Nutzungsbedingungen zu. Es werden keine weiteren Daten
-            gespeichert!
+            diesen Nutzungsbedingungen zu. Es werden keine weiteren persönlichen
+            Daten gespeichert.
           </p>
           <AccountSection isSetup={true} />
         </Card>
