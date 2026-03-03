@@ -59,7 +59,7 @@ export default function useApi() {
   const sendMessage = useMutation({
     mutationFn: async (message: UserMessage) => {
       const res = await fetch(
-        `${URL_API_NOTIFICATIONS}?action=${NotificationAction.send}}`,
+        `${URL_API_NOTIFICATIONS}?action=${NotificationAction.send}`,
         {
           method: 'POST',
           headers: {
