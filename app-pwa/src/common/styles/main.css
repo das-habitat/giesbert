@@ -2,7 +2,7 @@
 @source "../index.html";
 
 :root {
-  --background: #F4F4D7;
+  --background: #f4f4d7;
   --foreground: #000000;
 }
 
@@ -12,24 +12,24 @@
   --font-sans: var(--font-noto-sans);
   --font-mono: var(--font-noto-sans-mono);
 
-  --color-olive-100: #F4F4D7;
-  --color-olive-300: #DEDE87;
-  --color-olive-700: #63641B;
+  --color-olive-100: #f4f4d7;
+  --color-olive-300: #dede87;
+  --color-olive-700: #63641b;
 
-  --color-livid-100: #EEF5F7;
-  --color-livid-400: #A9CED6;
-  --color-livid-700: #213E45;
+  --color-livid-100: #eef5f7;
+  --color-livid-400: #a9ced6;
+  --color-livid-700: #213e45;
 
-  --color-pink-100: #FEEDFF;
-  --color-pink-400: #F9B4FF;
-  --color-pink-500: #E929ED;
+  --color-pink-100: #feedff;
+  --color-pink-400: #f9b4ff;
+  --color-pink-500: #e929ed;
 
-  --color-red-600: #A70600;
+  --color-red-600: #a70600;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #F4F4D7;
+    --background: #f4f4d7;
     --foreground: #000000;
   }
 }

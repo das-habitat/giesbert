@@ -51,15 +51,15 @@ export default function NotificationsPage() {
                   data={
                     isGranted !== 'denied'
                       ? {
-                        title: 'Hier piept gerade nichts',
-                        message:
-                          'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
-                      }
+                          title: 'Hier piept gerade nichts',
+                          message:
+                            'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
+                        }
                       : {
-                        title: 'Schade Marmelade',
-                        message:
-                          'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
-                      }
+                          title: 'Schade Marmelade',
+                          message:
+                            'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
+                        }
                   }
                 />
               )}
@@ -107,7 +107,10 @@ function SetupGuide() {
         diese Webseite als App auf deinem Smartphone zu installieren. Zum
         Beispiel so:
       </p>
-      <Card className="my-4 bg-livid-400 text-black border-3 border-black" size="small">
+      <Card
+        className="my-4 bg-livid-400 text-black border-3 border-black"
+        size="small"
+      >
         <p className="font-bold">Android (Chrome)</p>
         <Button
           onClick={promptInstall}
@@ -117,7 +120,10 @@ function SetupGuide() {
           App installieren
         </Button>
       </Card>
-      <Card className="bg-livid-400 text-black border-3 border-black" size="small">
+      <Card
+        className="bg-livid-400 text-black border-3 border-black"
+        size="small"
+      >
         <p className="font-bold mb-1">iOS/MacOS (Safari)</p>
         <ol className="list-decimal list-inside">
           <li>
@@ -243,7 +249,10 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
   }
 
   return (
-    <Card className={`relative bg-livid-400 border-3 border-black ${className}`} size="small">
+    <Card
+      className={`relative bg-livid-400 border-3 border-black ${className}`}
+      size="small"
+    >
       {isLoading && <LoaderCard />}
       <div className={isLoading ? 'blur-xs' : ''}>
         <h3 className="font-bold text-xl mb-4 text-black">Dein Konto</h3>
@@ -348,7 +357,9 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
   }
 
   return (
-    <Card className={`relative mb-6 bg-livid-400 border-3 border-black ${className}`}>
+    <Card
+      className={`relative mb-6 bg-livid-400 border-3 border-black ${className}`}
+    >
       {isLoading && <LoaderCard className="bg-livid-100/20" />}
       <div
         className={`flex flex-col items-center ${isLoading ? 'blur-xs' : ''}`}

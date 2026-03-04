@@ -10,7 +10,8 @@ export default function Footer() {
           href="https://das-habitat.de"
           target="_blank"
         >
-          Das Habitat Augsburg e.V.<ExternalLink size={16} className="inline ml-1 mb-0.5" />
+          Das Habitat Augsburg e.V.
+          <ExternalLink size={16} className="inline ml-1 mb-0.5" />
         </a>
       </span>
     </footer>
