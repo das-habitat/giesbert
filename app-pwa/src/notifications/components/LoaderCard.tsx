@@ -6,7 +6,7 @@ export default function LoaderCard({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <Card
-      className={`absolute top-0 left-0 w-full h-full flex justify-center items-center z-100 text-livid-800 ${className}`}
+      className={`absolute top-0 left-0 w-full h-full flex justify-center items-center z-100 text-olive-700 ${className}`}
     >
       <LoaderCircle className="animate-spin text-inherit" size={65} />
     </Card>

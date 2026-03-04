@@ -22,7 +22,7 @@ export default function NotificationsPage() {
         {!isLoading && !user && <SetupGuide />}
         {!isLoading && user && (
           <>
-            <Card className="bg-livid-400 mb-6" size="small">
+            <Card className="bg-olive-300 mb-6" size="small">
               <h3 className="text-2xl font-bold mb-6">Benachrichtigungen</h3>
               {user.notifications.length > 0 ? (
                 <div className="flex flex-col gap-4">
@@ -30,7 +30,7 @@ export default function NotificationsPage() {
                     (notification: UserNotification, idx: number) => (
                       <Card
                         key={idx}
-                        className="bg-pink-400 text-pretty"
+                        className="bg-pink-400 text-pretty border-3 border-black"
                         size="small"
                       >
                         <p className="text-lg font-bold">
@@ -46,13 +46,14 @@ export default function NotificationsPage() {
                 </div>
               ) : (
                 <StatusCard
+                  className="border-3 border-black"
                   icon="info"
                   data={
                     isGranted !== 'denied'
                       ? {
                         title: 'Hier piept gerade nichts',
                         message:
-                          'Schicke dir eine Testnachricht oder nutze den Beispiel-Code, um dir Benachrichtigungen zu schicken.',
+                          'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
                       }
                       : {
                         title: 'Schade Marmelade',
@@ -63,7 +64,7 @@ export default function NotificationsPage() {
                 />
               )}
             </Card>
-            <Card className="bg-livid-400" size="small">
+            <Card className="bg-olive-300" size="small">
               <h3 className="text-2xl font-bold mb-6">Dein Zugang</h3>
               <TestingSection className="mb-6" />
               <AccountSection />
@@ -99,24 +100,24 @@ function SetupGuide() {
   };
 
   return !isStandalone ? (
-    <Card className="bg-livid-400">
+    <Card className="bg-olive-300">
       <h3 className="text-2xl font-bold mb-4">App installieren</h3>
       <p>
         Damit du Push Notifications senden und erhalten kannst, ist es nötig
         diese Webseite als App auf deinem Smartphone zu installieren. Zum
         Beispiel so:
       </p>
-      <Card className="my-4 bg-livid-700 text-livid-100" size="small">
+      <Card className="my-4 bg-livid-400 text-black border-3 border-black" size="small">
         <p className="font-bold">Android (Chrome)</p>
         <Button
           onClick={promptInstall}
-          className="bg-livid-100 text-livid-700 mt-2 disabled:cursor-not-allowed disabled:opacity-50 w-56"
+          className="bg-black text-white mt-2 disabled:cursor-not-allowed disabled:opacity-50 w-56"
           disabled={!deferredPrompt}
         >
           App installieren
         </Button>
       </Card>
-      <Card className="bg-livid-700 text-livid-100" size="small">
+      <Card className="bg-livid-400 text-black border-3 border-black" size="small">
         <p className="font-bold mb-1">iOS/MacOS (Safari)</p>
         <ol className="list-decimal list-inside">
           <li>
@@ -146,7 +147,7 @@ function SetupGuide() {
           }}
         />
       ) : (
-        <Card className="bg-livid-400">
+        <Card className="bg-olive-300">
           <h3 className="text-2xl font-bold mb-4">Zugang erstellen</h3>
           <p className="mb-4">
             Die Nutzung der giesbert App ist kostenlos und nur für private
@@ -242,16 +243,16 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
   }
 
   return (
-    <Card className={`relative bg-violet-400 ${className}`} size="small">
+    <Card className={`relative bg-livid-400 border-3 border-black ${className}`} size="small">
       {isLoading && <LoaderCard />}
       <div className={isLoading ? 'blur-xs' : ''}>
-        <h3 className="font-bold text-xl mb-4 text-violet-900">Dein Konto</h3>
+        <h3 className="font-bold text-xl mb-4 text-black">Dein Konto</h3>
         {!isLogin && (
           <Input
             id="nickname"
             label="*Dein Name"
-            labelStyle="text-violet-700"
-            inputStyle="mb-3 text-violet-900 bg-livid-100 disabled:cursor-not-allowed disabled:opacity-50"
+            labelStyle="text-livid-700"
+            inputStyle="mb-3 text-black bg-livid-100 disabled:cursor-not-allowed disabled:opacity-50"
             type="text"
             disabled={!!user}
             value={nickname}
@@ -261,8 +262,8 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
         <Input
           id="email"
           label="*Deine E-Mail-Adresse"
-          labelStyle="text-violet-700"
-          inputStyle="mb-3 text-violet-900 bg-livid-100 disabled:cursor-not-allowed disabled:opacity-50"
+          labelStyle="text-livid-700"
+          inputStyle="mb-3 text-black bg-livid-100 disabled:cursor-not-allowed disabled:opacity-50"
           type="text"
           disabled={!!user}
           value={email}
@@ -272,8 +273,8 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
           <Input
             id="channel"
             label="*Kanal (kann von mehreren Personen verwendet werden)"
-            labelStyle="text-violet-700"
-            inputStyle="mb-3 text-violet-900 bg-livid-100"
+            labelStyle="text-livid-700"
+            inputStyle="mb-3 text-black bg-livid-100"
             type="text"
             value={channel}
             onChange={(e) => setChannel(e.target.value)}
@@ -281,7 +282,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
         )}
         <div className="flex flex-wrap justify-center gap-3 mt-4">
           <Button
-            className="bg-violet-700 text-livid-100 w-56"
+            className="bg-black text-white w-56"
             onClick={submit}
             disabled={isLoading}
           >
@@ -293,7 +294,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
           </Button>
           {isSetup && (
             <Button
-              className="text-violet-700 underline"
+              className="text-black underline"
               onClick={toggleSetup}
               disabled={isLoading}
             >
@@ -302,7 +303,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
           )}
           {user && (
             <Button
-              className="text-red-500 border-red-500! w-56"
+              className="text-red-600 border-red-600! w-56"
               onClick={deleteAccount}
               disabled={isLoading}
             >
@@ -347,21 +348,21 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
   }
 
   return (
-    <Card className={`relative mb-6 bg-livid-700 ${className}`}>
+    <Card className={`relative mb-6 bg-livid-400 border-3 border-black ${className}`}>
       {isLoading && <LoaderCard className="bg-livid-100/20" />}
       <div
         className={`flex flex-col items-center ${isLoading ? 'blur-xs' : ''}`}
       >
         <Input
           id="message"
-          inputStyle="mb-6 text-livid-800 bg-livid-100"
+          inputStyle="mb-6 text-black bg-olive-100"
           type="text"
           placeholder="Deine Nachricht"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
         <Button
-          className="bg-pink-400 text-livid-700 w-56"
+          className="bg-black text-white w-56"
           onClick={sendTestNotification}
           disabled={isLoading}
         >

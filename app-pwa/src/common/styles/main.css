@@ -2,8 +2,8 @@
 @source "../index.html";
 
 :root {
-  --background: #bad7de;
-  --foreground: #213e45;
+  --background: #F4F4D7;
+  --foreground: #000000;
 }
 
 @theme inline {
@@ -11,22 +11,26 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-noto-sans);
   --font-mono: var(--font-noto-sans-mono);
-  --color-livid-100: #eef5f7;
-  --color-livid-300: #bad7de;
-  --color-livid-400: #87bac5;
-  --color-livid-700: #34626c;
-  --color-livid-800: #213e45;
-  --color-violet-400: #cbc6d0;
-  --color-violet-700: #645b6e;
-  --color-violet-900: #403a46;
-  --color-pink-400: #f9b4ff;
-  --color-red-500: #d51407;
+
+  --color-olive-100: #F4F4D7;
+  --color-olive-300: #DEDE87;
+  --color-olive-700: #63641B;
+
+  --color-livid-100: #EEF5F7;
+  --color-livid-400: #A9CED6;
+  --color-livid-700: #213E45;
+
+  --color-pink-100: #FEEDFF;
+  --color-pink-400: #F9B4FF;
+  --color-pink-500: #E929ED;
+
+  --color-red-600: #A70600;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #bad7de;
-    --foreground: #213e45;
+    --background: #F4F4D7;
+    --foreground: #000000;
   }
 }
 

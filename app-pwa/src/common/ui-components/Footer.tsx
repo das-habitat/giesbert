@@ -1,15 +1,18 @@
-import { Github } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 export default function Footer() {
   return (
     <footer className="my-16 text-center">
-      <a
-        className="text-livid-800 underline font-medium hover:text-pink-400 font-sans"
-        href="https://github.com/schwamic/digimunea/tree/main/src/app/apps"
-        target="_blank"
-      >
-        giesbert (v0.1.0) on Github <Github className="inline ml-1" />
-      </a>
+      <span>
+        App Version 0.1.0 /{' '}
+        <a
+          className="text-black underline font-medium hover:text-pink-400 font-sans"
+          href="https://das-habitat.de"
+          target="_blank"
+        >
+          Das Habitat Augsburg e.V.<ExternalLink size={16} className="inline ml-1 mb-0.5" />
+        </a>
+      </span>
     </footer>
   );
 }

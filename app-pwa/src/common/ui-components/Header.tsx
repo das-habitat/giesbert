@@ -15,7 +15,7 @@ export default function Header({
         />
       </div>
       <div>
-        <h1 className="text-4xl font-bold text-livid-700">
+        <h1 className="text-4xl font-bold text-olive-700">
           {content.long}
           <br />
           <span className="font-medium">[{content.short}]</span>

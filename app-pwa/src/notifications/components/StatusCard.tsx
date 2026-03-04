@@ -10,7 +10,7 @@ export default function StatusCard({
 }: ErrorCardProps) {
   return (
     <Card
-      className={`${style === 'info' ? 'bg-livid-700' : 'bg-pink-400'} flex items-start ${className}`}
+      className={`${style === 'info' ? 'bg-olive-700' : 'bg-pink-400'} flex items-start ${className}`}
       size={size}
     >
       {icon === 'info' ? (
