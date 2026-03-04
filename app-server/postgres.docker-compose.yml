@@ -7,7 +7,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - giesbert-db:/var/lib/postgresql/data
+      - giesbert-db:/var/lib/postgresql
 
 # server:
 #   image: ghcr.io/das-habitat/giesbert/server:latest
