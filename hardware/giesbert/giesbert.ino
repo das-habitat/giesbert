@@ -2,29 +2,23 @@
 #include <HTTPClient.h>
 #include <WiFiManager.h>
 
-// ========== DOCUMENTATION ==========
-// 1. https://github.com/vektorious/hpi_smart_plants
-// 2. https://wiki.seeedstudio.com/xiao_esp32c6_getting_started
-
 // ========== PIN CONFIGURATION ==========
 #define MOISTURE_PIN A1
 #define BATTERY_PIN A0
 #define SENSOR_POWER_PIN D10
 
-// ========== DEVICE SETTINGS ==========
-#define DEVICE_NAME "Pflanze001"
-#define AP_ID "Pflanze001"
-#define DEVICE_UUID "b3e839ee" // first 8 symbols by https://www.uuidgenerator.net/version4
+// ========== NETWORK SETTINGS ==========
 #define PORTAL_TIMEOUT 120 // 120 = 2 minutes
-
-// ========== API SETTINGS ==========
+#define AP_ID "giesbert"
 // Push Notifications (optional)
-#define PUSH_API "http://localhost:3000/api/notifications?action=send"
-#define USER_REF "changemepls@mail.de"
-#define CHANNEL_REF "changemepls"
+// Requires that the user has installed the pwa: https://giesbert.das-habitat.de 
+#define DEVICE_NAME "Beispielpflanze" // --> CHANGE ME PLS <--
+#define PUSH_API "https://giesbert.das-habitat.de/api/notifications?action=send"
+#define USER_REF "beispiel@mail.de" // --> CHANGE ME PLS <--
+#define CHANNEL_REF "beispielkanal" // --> CHANGE ME PLS <--
 // IoT Dashboard (optional)
 // Requires that the user has an account: https://thingsboard.io/docs/user-guide/install/installation-options/?ceInstallType=liveDemo
-#define THINGS_API "http://localhost:3000/api/telemetry" // ThingsBoard device token URL
+#define THINGS_API "https://eu.thingsboard.cloud/api/v1/BEISPIELTOKEN/telemetry" // ThingsBoard device token URL // --> CHANGE ME PLS <--
 
 // ========== MEASUREMENT SETTINGS ==========
 #define TIME_TO_SLEEP 3600 // 300 = 5 minutes, 3600 = 1 hour
@@ -134,7 +128,7 @@ void setupWiFi() {
   // WiFi.mode switches to WIFI_AP → ESP creates its own network for the login portal
   Serial.println("WiFi failed. Starting WiFiManager...");
   WiFiManager wm;
-  String apName = "WifiManager-" + String(AP_ID);
+  String apName = String(AP_ID) + " WifiManager";
   wm.setConfigPortalTimeout(PORTAL_TIMEOUT);
   bool response = wm.autoConnect(apName.c_str()); // temporary network without password
   if (!response) {
@@ -186,9 +180,9 @@ void sendTelemetry(float moisturePercent, int batteryPercent) {
 
 /** ========== MAIN ==========
  * Flow (runs once per wakeup, then sleeps):
- * 1. Read moisture + battery, store in RTC arrays
- * 2. Every MAX_VALUES (24h): connect WiFi, send daily average, notify if needed
- * 3. Sleep for TIME_TO_SLEEP seconds
+ * 1. Every TIME_TO_SLEEP (1h): read moisture + battery, store in RTC arrays, connect to WiFi and send telemetry
+ * 2. Every MAX_VALUES (24h): calculate daily avg, connect to WiFi and send push notification
+ * 3. Go back to sleep
  */
 void setup() {
   Serial.begin(115200);
@@ -221,8 +215,14 @@ void setup() {
   batteryValues[measureCount] = batteryPercent;
   measureCount++;
   Serial.println("Measurement " + String(measureCount) + "/" + String(MAX_VALUES));
+  
+  // Initialize Wifi
+  setupWiFi();
 
-  // Send daily average once MAX_VALUES readings are collected
+  // 1. Send telemetry
+  sendTelemetry(moisturePercent, batteryPercent);
+
+  // 2. Send daily average (once MAX_VALUES readings are collected)
   if (measureCount >= MAX_VALUES) {
     long sumMoisture = 0, sumBattery = 0;
     for (int i = 0; i < MAX_VALUES; i++) {
@@ -233,13 +233,9 @@ void setup() {
     int avgBattery = sumBattery / MAX_VALUES;
     Serial.println("Daily avg – Moisture: " + String(avgMoisture, 1) + "%, Battery: " + String(avgBattery) + "%");
 
-    setupWiFi();
-    sendTelemetry(avgMoisture, avgBattery);
-
-    if (avgMoisture < 20 || avgBattery < 10) {
-      String msg = "bibup bibup – Bodenfeuchte: " + String(avgMoisture, 0) + "%, Batterie: " + String(avgBattery) + "%";
-      sendNotification(msg);
-    }
+    // Optional: Only send notifications, if values reach a specific point, like (avgMoisture < 20 || avgBattery < 10)
+    String msg = "bibup bibup – Bodenfeuchte: " + String(avgMoisture, 0) + "%, Batterie: " + String(avgBattery) + "%";
+    sendNotification(msg);
 
     resetValues();
   }
