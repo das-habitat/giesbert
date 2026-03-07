@@ -27,9 +27,10 @@ export default function usePushService() {
       permission = await Notification.requestPermission();
       setIsGranted(permission);
     }
-    const registration = await navigator.serviceWorker.register('/sw.js', {
+    const registration = await navigator.serviceWorker.register(import.meta.env.DEV ? '/dev-sw.js?dev-sw' : '/sw.js', {
       scope: '/',
       updateViaCache: 'none',
+      type: import.meta.env.DEV ? 'module' : 'classic',
     });
     await navigator.serviceWorker.ready;
     console.log('Service Worker ready:', registration.active);

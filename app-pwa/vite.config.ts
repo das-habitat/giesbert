@@ -4,7 +4,15 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      }
+    }
+  },
   plugins: [react(), tailwindcss(), VitePWA({
     injectRegister: false,
 
@@ -16,7 +24,6 @@ export default defineConfig({
       disabled: false,
       config: true,
     },
-
     manifest: {
       name: 'Sprechender Blumentopf [giesbert]',
       short_name: 'giesbert',
@@ -64,16 +71,14 @@ export default defineConfig({
         },
       ],
     },
-
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
     },
-
     devOptions: {
-      enabled: false,
+      enabled: mode === 'development',
       navigateFallback: 'index.html',
       suppressWarnings: true,
       type: 'module',
     },
   })],
-})
+}))

@@ -14,7 +14,12 @@ Fullstack TypeScript with Nest and React.
 
 ### Local Development
 
-You need Docker and [Taskfile](https://taskfile.dev) installed on your compouter, then run `task dev`.
+You need Docker and [Taskfile](https://taskfile.dev) installed on your compouter.
+
+1. Run `task dev`
+2. Open Chrome `localhost:5173`
+3. Install the PWA and accept push notifications
+4. Register new account
 
 ### Deployment
 
