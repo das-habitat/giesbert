@@ -1,3 +1,8 @@
+const content = {
+  long: 'Sprechender Blumentopf',
+  short: 'giesbert',
+} as const;
+
 export default function Header({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
@@ -15,7 +20,7 @@ export default function Header({
         />
       </div>
       <div>
-        <h1 className="text-4xl font-bold text-olive-700">
+        <h1 className="text-4xl font-bold text-olive-700 text-center sm:text-left">
           {content.long}
           <br />
           <span className="font-medium">[{content.short}]</span>
@@ -24,8 +29,3 @@ export default function Header({
     </div>
   );
 }
-
-const content = {
-  long: 'Sprechender Blumentopf',
-  short: 'giesbert',
-};

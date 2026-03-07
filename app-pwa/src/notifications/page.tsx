@@ -6,6 +6,112 @@ import { useAccount, usePushService } from './hooks';
 import { useApi } from '../common/clients';
 import { LoaderCard, StatusCard } from './components';
 
+const content = {
+  setup: {
+    title: 'App installieren',
+    desc: 'Damit du Push Notifications senden und erhalten kannst, ist es nötig diese Webseite als App auf deinem Smartphone zu installieren. Zum Beispiel so:',
+    error: {
+      browser:
+        'Dein Browser unterstützt keine Push-Benachrichtigungen. Verwende einen anderen Browser wie zum Beispiel Firefox, Safari oder Chrome.',
+    },
+    guide: {
+      chromium: {
+        device: 'Android (Chrome)',
+        step: 'App installieren',
+      },
+      safari: {
+        device: 'iOS/MacOS (Safari)',
+        steps: [
+          'Tippe auf den ',
+          'Teilen-Button',
+          'Wähle ',
+          'Zum Startbildschirm/Dock hinzufügen',
+          ' aus',
+        ],
+      },
+    },
+  },
+  notifications: {
+    title: 'Benachrichtigungen',
+    status: {
+      empty: {
+        title: 'Hier piept gerade nichts',
+        text: 'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
+      },
+      settings: {
+        title: 'Schade Marmelade',
+        text: 'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
+      },
+    },
+  },
+  account: {
+    form: {
+      fields: {
+        email: '*Deine E-Mail-Adresse',
+        nickname: '*Dein Name',
+        channel: '*Kanal (kann von mehreren Personen verwendet werden)',
+      },
+      error: {
+        email:
+          'Ups, da stimmt noch nicht alles – E-Mail-Adresse bitte nochmal prüfen 👀',
+        misc: 'Ups, da stimmt noch nicht alles – schau bitte nochmal drüber 👀',
+        channel:
+          'Ups, da stimmt noch nicht alles – Kanal bitte nochmal prüfen 👀',
+      },
+      nav: {
+        login: 'Zum Login',
+        create: 'Zur Registrierung',
+      },
+      btn: {
+        login: 'Einloggen',
+        create: 'Konto erstellen',
+        delete: 'Konto löschen',
+        update: 'Einstellungen speichern',
+      },
+      alert: {
+        delete: 'Konto löschen? Dramatische Musik setzt ein 🎻',
+      },
+      section: {
+        create: {
+          title: 'Zugang erstellen',
+          desc: 'Die Nutzung der giesbert App ist kostenlos und nur für private Hobby-Projekte erlaubt. Mit der Erstellung deines Kontos stimmst du diesen Nutzungsbedingungen zu. Es werden keine weiteren persönlichen Daten gespeichert.',
+        },
+        access: 'Dein Konto',
+      },
+    },
+    access: {
+      title: 'Dein Zugang',
+      docs: {
+        title: 'Dokumentation',
+        desc: [
+          'Informationen zur Verwendung der API und Anwendungsbeispiele findest du in unserem ',
+          {
+            href: 'https://github.com/das-habitat/giesbert',
+            text: 'öffentlichen Ordner',
+          },
+          '. Zum Testen, ob Push-Benarichtingungen generell funktionieren, kannst du dir eine Testnachricht schicken:',
+        ],
+        form: {
+          fields: {
+            message: 'Deine Nachricht',
+          },
+          error: {
+            message:
+              'Bitte gib eine Nachricht ein – Gedankenübertragung ist noch im Beta-Test 🙃',
+          },
+          btn: {
+            send: 'Testnachricht senden',
+          },
+        },
+      },
+    },
+  },
+  error: {
+    network:
+      'Oje… es ist ein Fehler aufgetreten. Ein zweiter Versuch könnte helfen 🔁',
+  },
+} as const;
+
 export default function NotificationsPage() {
   const { isGranted } = usePushService();
   const { user, isLoading } = useAccount();
@@ -23,7 +129,9 @@ export default function NotificationsPage() {
         {!isLoading && user && (
           <>
             <Card className="bg-olive-300 mb-6" size="small">
-              <h3 className="text-2xl font-bold mb-6">Benachrichtigungen</h3>
+              <h3 className="text-2xl font-bold mb-6">
+                {content.notifications.title}
+              </h3>
               {user.notifications.length > 0 ? (
                 <div className="flex flex-col gap-4">
                   {user.notifications.map(
@@ -51,21 +159,21 @@ export default function NotificationsPage() {
                   data={
                     isGranted !== 'denied'
                       ? {
-                        title: 'Hier piept gerade nichts',
-                        message:
-                          'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
-                      }
+                          title: content.notifications.status.empty.title,
+                          message: content.notifications.status.empty.text,
+                        }
                       : {
-                        title: 'Schade Marmelade',
-                        message:
-                          'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
-                      }
+                          title: content.notifications.status.settings.title,
+                          message: content.notifications.status.settings.text,
+                        }
                   }
                 />
               )}
             </Card>
             <Card className="bg-olive-300" size="small">
-              <h3 className="text-2xl font-bold mb-6">Dein Zugang</h3>
+              <h3 className="text-2xl font-bold mb-6">
+                {content.account.access.title}
+              </h3>
               <TestingSection className="mb-4" />
               <AccountSection />
             </Card>
@@ -101,42 +209,41 @@ function SetupGuide() {
 
   return !isStandalone ? (
     <Card className="bg-olive-300">
-      <h3 className="text-2xl font-bold mb-4">App installieren</h3>
-      <p>
-        Damit du Push Notifications senden und erhalten kannst, ist es nötig
-        diese Webseite als App auf deinem Smartphone zu installieren. Zum
-        Beispiel so:
-      </p>
+      <h3 className="text-2xl font-bold mb-4">{content.setup.title}</h3>
+      <p>{content.setup.desc}</p>
       <Card
         className="my-4 bg-livid-400 text-black border-3 border-black"
         size="small"
       >
-        <p className="font-bold">Android (Chrome)</p>
+        <p className="font-bold">{content.setup.guide.chromium.device}</p>
         <Button
           onClick={promptInstall}
           className="bg-black text-white mt-2 disabled:cursor-not-allowed disabled:opacity-50 w-56"
           disabled={!deferredPrompt}
         >
-          App installieren
+          {content.setup.guide.chromium.step}
         </Button>
       </Card>
       <Card
         className="bg-livid-400 text-black border-3 border-black"
         size="small"
       >
-        <p className="font-bold mb-1">iOS/MacOS (Safari)</p>
+        <p className="font-bold mb-1">{content.setup.guide.safari.device}</p>
         <ol className="list-decimal list-inside">
           <li>
-            Tippe auf den{' '}
-            <span className="italic font-bold">Teilen-Button</span>{' '}
-            <Share className="inline" />.
+            {content.setup.guide.safari.steps[0]}
+            <span className="italic font-bold">
+              {content.setup.guide.safari.steps[1]}
+            </span>
+            <Share className="inline" />
           </li>
           <li>
-            Wähle{' '}
+            {content.setup.guide.safari.steps[2]}
             <span className="italic font-bold">
-              Zum Startbildschirm/Dock hinzufügen
-            </span>{' '}
-            <Plus className="inline" /> aus
+              {content.setup.guide.safari.steps[3]}
+            </span>
+            <Plus className="inline" />
+            {content.setup.guide.safari.steps[4]}
           </li>
         </ol>
       </Card>
@@ -148,19 +255,15 @@ function SetupGuide() {
           className="mb-6"
           size="large"
           data={{
-            message:
-              'Dein Browser unterstützt keine Push-Benachrichtigungen. Verwende einen anderen Browser wie zum Beispiel Firefox, Safari oder Chrome.',
+            message: content.setup.error.browser,
           }}
         />
       ) : (
         <Card className="bg-olive-300">
-          <h3 className="text-2xl font-bold mb-4">Zugang erstellen</h3>
-          <p className="mb-4">
-            Die Nutzung der giesbert App ist kostenlos und nur für private
-            Hobby-Projekte erlaubt. Mit der Erstellung deines Kontos stimmst du
-            diesen Nutzungsbedingungen zu. Es werden keine weiteren persönlichen
-            Daten gespeichert.
-          </p>
+          <h3 className="text-2xl font-bold mb-4">
+            {content.account.form.section.create.title}
+          </h3>
+          <p className="mb-4">{content.account.form.section.create.desc}</p>
           <AccountSection isSetup={true} />
         </Card>
       )}
@@ -186,9 +289,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
         if (isLogin) {
           // Login flow
           if (!isEmailValid) {
-            alert(
-              'Ups, da stimmt noch nicht alles – E-Mail-Adresse bitte nochmal prüfen 👀',
-            );
+            alert(content.account.form.error.email);
             return;
           }
           setIsLoading(true);
@@ -196,9 +297,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
         } else {
           // Signup flow
           if (!isNicknameValid || !isEmailValid || !isChannelValid) {
-            alert(
-              'Ups, da stimmt noch nicht alles – schau bitte nochmal drüber 👀',
-            );
+            alert(content.account.form.error.misc);
             return;
           }
           setIsLoading(true);
@@ -207,9 +306,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
       } else {
         // Update flow
         if (!isChannelValid) {
-          alert(
-            'Ups, da stimmt noch nicht alles – Kanal bitte nochmal prüfen 👀',
-          );
+          alert(content.account.form.error.channel);
           return;
         }
         setIsLoading(true);
@@ -218,18 +315,14 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      alert(
-        'Oje… es ist ein Fehler aufgetreten. Ein zweiter Versuch könnte helfen 🔁',
-      );
+      alert(content.error.network);
       console.error('Submit error:', error);
     }
   }
 
   async function deleteAccount() {
     if (isLoading) return;
-    const confirm = window.confirm(
-      'Konto löschen? Dramatische Musik setzt ein 🎻',
-    );
+    const confirm = window.confirm(content.account.form.alert.delete);
     if (!confirm) return;
     try {
       setIsLoading(true);
@@ -237,9 +330,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      alert(
-        'Oje… es ist ein Fehler aufgetreten. Ein zweiter Versuch könnte helfen 🔁',
-      );
+      alert(content.error.network);
       console.error('Delete account error:', error);
     }
   }
@@ -255,11 +346,13 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
     >
       {isLoading && <LoaderCard />}
       <div className={isLoading ? 'blur-xs' : ''}>
-        <h3 className="font-bold text-xl mb-4 text-black">Dein Konto</h3>
+        <h3 className="font-bold text-xl mb-4 text-black">
+          {content.account.form.section.access}
+        </h3>
         {!isLogin && (
           <Input
             id="nickname"
-            label="*Dein Name"
+            label={content.account.form.fields.nickname}
             labelStyle="text-livid-700"
             inputStyle="mb-3 text-black bg-livid-100 disabled:cursor-not-allowed disabled:opacity-50"
             type="text"
@@ -270,7 +363,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
         )}
         <Input
           id="email"
-          label="*Deine E-Mail-Adresse"
+          label={content.account.form.fields.email}
           labelStyle="text-livid-700"
           inputStyle="mb-3 text-black bg-livid-100 disabled:cursor-not-allowed disabled:opacity-50"
           type="text"
@@ -281,7 +374,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
         {!isLogin && (
           <Input
             id="channel"
-            label="*Kanal (kann von mehreren Personen verwendet werden)"
+            label={content.account.form.fields.channel}
             labelStyle="text-livid-700"
             inputStyle="mb-3 text-black bg-livid-100"
             type="text"
@@ -297,9 +390,9 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
           >
             {!user
               ? isLogin
-                ? 'Einloggen'
-                : 'Konto erstellen'
-              : 'Einstellungen speichern'}
+                ? content.account.form.btn.login
+                : content.account.form.btn.create
+              : content.account.form.btn.update}
           </Button>
           {isSetup && (
             <Button
@@ -307,7 +400,9 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
               onClick={toggleSetup}
               disabled={isLoading}
             >
-              {!isLogin ? 'Zum Login' : 'Zur Registrierung'}
+              {!isLogin
+                ? content.account.form.nav.login
+                : content.account.form.nav.create}
             </Button>
           )}
           {user && (
@@ -316,7 +411,7 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
               onClick={deleteAccount}
               disabled={isLoading}
             >
-              Konto löschen
+              {content.account.form.btn.delete}
             </Button>
           )}
         </div>
@@ -335,9 +430,7 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
     if (isLoading) return;
     const isMessageValid = message.length > 0;
     if (!isMessageValid) {
-      alert(
-        'Bitte gib eine Nachricht ein – Gedankenübertragung ist noch im Beta-Test 🙃',
-      );
+      alert(content.account.access.docs.form.error.message);
       return;
     }
     setIsLoading(true);
@@ -349,7 +442,7 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
         channelRef: user!.channels[0].channelRef,
       });
     } catch (error) {
-      alert('Ups! Fehler beim Senden. Ein zweiter Versuch könnte helfen 🔁');
+      alert(content.error.network);
       console.error('Send message error:', error);
     }
     setMessage('');
@@ -363,27 +456,27 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
     >
       {isLoading && <LoaderCard className="bg-livid-100/20" />}
       <div className={isLoading ? 'blur-xs' : ''}>
-        <h3 className="font-bold text-xl mb-4 text-black">Dokumentation</h3>
+        <h3 className="font-bold text-xl mb-4 text-black">
+          {content.account.access.docs.title}
+        </h3>
         <span className="inline-block mb-4">
-          Informationen zur Verwendung der API und Anwendungsbeispiele findest
-          du in unserem{' '}
+          {content.account.access.docs.desc[0]}
           <a
             className="text-black underline font-medium hover:text-pink-400 font-sans"
-            href="https://github.com/das-habitat/giesbert"
+            href={content.account.access.docs.desc[1].href}
             target="_blank"
           >
-            öffentlichen Ordner
+            {content.account.access.docs.desc[1].text}
             <ExternalLink size={16} className="inline ml-1 mb-0.5" />
           </a>
-          . Zum Testen, ob Push-Benarichtingungen generell funktionieren, kannst
-          du dir eine Testnachricht schicken:
+          {content.account.access.docs.desc[2]}
         </span>
         <div className="flex flex-col items-center">
           <Input
             id="message"
             inputStyle="mb-6 text-black bg-livid-100"
             type="text"
-            placeholder="Deine Nachricht"
+            placeholder={content.account.access.docs.form.fields.message}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
@@ -392,7 +485,7 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
             onClick={sendTestNotification}
             disabled={isLoading}
           >
-            Testnachricht senden
+            {content.account.access.docs.form.btn.send}
           </Button>
         </div>
       </div>
