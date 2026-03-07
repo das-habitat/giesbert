@@ -1,3 +1,3 @@
-# Giesbert PWA
+# giesbert PWA
 
 React + TypeScript + Vite

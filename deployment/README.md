@@ -1,13 +1,13 @@
-# Giesbert Deployment
+# giesbert Deployment
 
 Configuration files for production environment: [/deployment](../deployment/).
 
 ## Infrastructure
 
 - GitLab: Docker Registry, Repository, CI/CD Pipeline
-- [IONOS VPS XS](https://www.ionos.de/server/vps) (1€/month)
-  - 2 GB RAM / 2 vCore / 80 GB NVMe SSD
-  - Orcestration via Docker Swarm + Shepherd
+- [Hetzner CX23](https://www.hetzner.com/de/cloud)
+  - 4 GB RAM / 2 vCore / 40 GB SSD / Ubuntu
+  - Orchestration via Docker Swarm + Shepherd
 
 ## Linux Settings
 
