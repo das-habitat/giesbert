@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Share } from 'lucide-react';
+import { Plus, Share, ExternalLink } from 'lucide-react';
 import { type UserNotification } from 'app-shared';
 import { Button, Input, Header, Card } from '../common/ui-components';
 import { useAccount, usePushService } from './hooks';
@@ -51,15 +51,15 @@ export default function NotificationsPage() {
                   data={
                     isGranted !== 'denied'
                       ? {
-                        title: 'Hier piept gerade nichts',
-                        message:
-                          'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
-                      }
+                          title: 'Hier piept gerade nichts',
+                          message:
+                            'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
+                        }
                       : {
-                        title: 'Schade Marmelade',
-                        message:
-                          'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
-                      }
+                          title: 'Schade Marmelade',
+                          message:
+                            'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
+                        }
                   }
                 />
               )}
@@ -359,26 +359,42 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <Card
       className={`relative mb-6 bg-livid-400 border-3 border-black ${className}`}
+      size="small"
     >
       {isLoading && <LoaderCard className="bg-livid-100/20" />}
-      <div
-        className={`flex flex-col items-center ${isLoading ? 'blur-xs' : ''}`}
-      >
-        <Input
-          id="message"
-          inputStyle="mb-6 text-black bg-livid-100"
-          type="text"
-          placeholder="Deine Nachricht"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <Button
-          className="bg-black text-white w-56"
-          onClick={sendTestNotification}
-          disabled={isLoading}
-        >
-          Testnachricht senden
-        </Button>
+      <div className={isLoading ? 'blur-xs' : ''}>
+        <h3 className="font-bold text-xl mb-4 text-black">Dokumentation</h3>
+        <span className="inline-block mb-4">
+          Informationen zur Verwendung der API und Anwendungsbeispiele findest
+          du in unserem{' '}
+          <a
+            className="text-black underline font-medium hover:text-pink-400 font-sans"
+            href="https://github.com/das-habitat/giesbert"
+            target="_blank"
+          >
+            öffentlichen Ordner
+            <ExternalLink size={16} className="inline ml-1 mb-0.5" />
+          </a>
+          . Zum Testen, ob Push-Benarichtingungen generell funktionieren, kannst
+          du dir eine Testnachricht schicken:
+        </span>
+        <div className="flex flex-col items-center">
+          <Input
+            id="message"
+            inputStyle="mb-6 text-black bg-livid-100"
+            type="text"
+            placeholder="Deine Nachricht"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <Button
+            className="bg-black text-white w-56"
+            onClick={sendTestNotification}
+            disabled={isLoading}
+          >
+            Testnachricht senden
+          </Button>
+        </div>
       </div>
     </Card>
   );
