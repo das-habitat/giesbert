@@ -51,22 +51,22 @@ export default function NotificationsPage() {
                   data={
                     isGranted !== 'denied'
                       ? {
-                          title: 'Hier piept gerade nichts',
-                          message:
-                            'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
-                        }
+                        title: 'Hier piept gerade nichts',
+                        message:
+                          'Schicke dir eine Testnachricht, um hier Benachrichtigungen zu sehen.',
+                      }
                       : {
-                          title: 'Schade Marmelade',
-                          message:
-                            'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
-                        }
+                        title: 'Schade Marmelade',
+                        message:
+                          'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
+                      }
                   }
                 />
               )}
             </Card>
             <Card className="bg-olive-300" size="small">
               <h3 className="text-2xl font-bold mb-6">Dein Zugang</h3>
-              <TestingSection className="mb-6" />
+              <TestingSection className="mb-4" />
               <AccountSection />
             </Card>
           </>
@@ -358,7 +358,7 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
 
   return (
     <Card
-      className={`relative mb-6 bg-livid-400 border-3 border-black ${className}`}
+      className={`relative bg-livid-400 border-3 border-black ${className}`}
       size="small"
     >
       {isLoading && <LoaderCard className="bg-livid-100/20" />}
