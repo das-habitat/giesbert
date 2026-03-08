@@ -2,7 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import { version } from '../../../package.json';
 
 const content = {
-  version: `App Version v${version}`,
+  version: `Version ${version}`,
   habitat: {
     href: 'https://das-habitat.de',
     text: 'Das Habitat Augsburg e.V.',
