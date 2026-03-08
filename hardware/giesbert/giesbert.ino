@@ -36,7 +36,7 @@ void resetValues() {
   memset(batteryValues, 0, sizeof(batteryValues));
 }
 
-// ========== SENSOR FUNCTIONS ==========
+// ========== MEASUREMENT FUNCTIONS ==========
 
 float readBatteryVoltage() {
   // Dummy read then short delay to stabilize the measurement
@@ -65,7 +65,8 @@ int batteryVoltageToPercent(float voltage) {
 }
 
 float readMoistureVoltage() {
-  // Short delay to stabilize the measurement
+  // Dummy read then short delay to stabilize the measurement
+  analogRead(MOISTURE_PIN);
   delay(50);
   const int SAMPLES = 16;
   uint32_t Vraw = 0;
@@ -140,8 +141,7 @@ void setupWiFi() {
   }
 }
 
-// Push Notifications (optional)
-// Requires that the user has installed the PWA: https://giesbert.das-habitat.de
+// (optional)
 void sendNotification(String message) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected, skipping notification.");
@@ -161,6 +161,7 @@ void sendNotification(String message) {
   http.end();
 }
 
+// (optional)
 void sendTelemetry(float moisturePercent, int batteryPercent) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected, skipping telemetry.");
