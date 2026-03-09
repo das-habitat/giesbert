@@ -1,33 +1,32 @@
-import { Injectable } from '@nestjs/common';
 import {
-  type NewUser,
-  type UpdateUser,
-  type Subscription,
-  NewUserSchema,
-  UpdateUserSchema,
-} from 'app-shared';
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { type Subscription, NewUserSchema, UpdateUserSchema } from 'app-shared';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
-  async upsertUser(data: NewUser | UpdateUser) {
-    const isUpdate = 'userRef' in data;
+  async upsertUser(data: unknown) {
+    const isUpdate =
+      typeof data === 'object' && data !== null && 'userRef' in data;
     if (isUpdate) {
-      const currentUser = await this.getUser(data.userRef);
-      if (!currentUser) throw new Error('User not found');
-      const userData = UpdateUserSchema.parse(data);
-      const isChannelUpdate =
-        userData?.channels && userData.channels.length > 0;
-      const isSubscriptionUpdate = userData?.subscription !== undefined;
+      const result = UpdateUserSchema.safeParse(data);
+      if (!result.success) throw new BadRequestException(result.error.issues);
+      const { userRef, channels, subscription } = result.data;
+      const isChannelUpdate = channels && channels.length > 0;
+      const isSubscriptionUpdate = subscription !== undefined;
       const updatedUser = await this.prisma.user.update({
-        where: { email: userData.userRef },
+        where: { email: userRef },
+        include: { channels: { include: { channel: true } } },
         data: {
           ...(isChannelUpdate && {
             channels: {
               deleteMany: {},
-              create: userData.channels!.map((channelRef) => ({
+              create: channels.map((channelRef) => ({
                 channel: {
                   connectOrCreate: {
                     where: { name: channelRef },
@@ -39,27 +38,26 @@ export class UsersService {
           }),
           ...(isSubscriptionUpdate && {
             subscriptions: {
-              create: {
-                data: userData.subscription as Subscription,
-              },
+              create: { data: subscription as Subscription },
             },
           }),
         },
       });
       return { success: true, user: updatedUser };
     } else {
-      const userData = NewUserSchema.parse(data);
+      const result = NewUserSchema.safeParse(data);
+      if (!result.success) throw new BadRequestException(result.error.issues);
+      const { nickname, email, channels, subscription } = result.data;
       const user = await this.prisma.user.create({
+        include: { channels: { include: { channel: true } } },
         data: {
-          nickname: userData.nickname,
-          email: userData.email,
+          nickname,
+          email,
           subscriptions: {
-            create: {
-              data: userData.subscription as Subscription,
-            },
+            create: { data: subscription as Subscription },
           },
           channels: {
-            create: userData.channels.map((channelRef) => ({
+            create: channels.map((channelRef) => ({
               channel: {
                 connectOrCreate: {
                   where: { name: channelRef },
@@ -70,43 +68,28 @@ export class UsersService {
           },
         },
       });
-      return { success: true, user: user };
+      return { success: true, user };
     }
   }
 
   async getUser(userRef: string) {
     const user = await this.prisma.user.findUnique({
       where: { email: userRef },
-      include: {
-        channels: {
-          include: {
-            channel: true,
-          },
-        },
-        notifications: {
-          orderBy: { createdAt: 'desc' },
-          take: 5,
-        },
-      },
+      include: { channels: { include: { channel: true } } },
     });
-    if (!user) throw new Error('User not found');
-    return { success: true, user: user };
+    if (!user) throw new NotFoundException(`User not found: ${userRef}`);
+    return { success: true, user };
   }
 
   async removeUser(userRef: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: userRef },
+    });
+    if (!user) throw new NotFoundException(`User not found: ${userRef}`);
     await this.prisma.$transaction([
-      this.prisma.usersOnChannels.deleteMany({
-        where: { userRef },
-      }),
-      this.prisma.notification.deleteMany({
-        where: { userRef },
-      }),
-      this.prisma.subscription.deleteMany({
-        where: { userRef },
-      }),
-      this.prisma.user.delete({
-        where: { email: userRef },
-      }),
+      this.prisma.usersOnChannels.deleteMany({ where: { userRef: user.id } }),
+      this.prisma.subscription.deleteMany({ where: { userRef: user.id } }),
+      this.prisma.user.delete({ where: { id: user.id } }),
     ]);
     return { success: true };
   }

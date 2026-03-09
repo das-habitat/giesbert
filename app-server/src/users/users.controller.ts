@@ -7,7 +7,6 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { type NewUser, type UpdateUser } from 'app-shared';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -21,7 +20,7 @@ export class UsersController {
   }
 
   @Put()
-  async upsertUser(@Body() body: NewUser | UpdateUser) {
+  async upsertUser(@Body() body: unknown) {
     return this.usersService.upsertUser(body);
   }
 

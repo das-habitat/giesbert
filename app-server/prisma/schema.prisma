@@ -13,12 +13,12 @@ datasource db {
 }
 
 model User {
-  email         String   @id
+  id            String            @id @default(cuid())
+  email         String            @unique
   nickname      String
-  createdAt     DateTime @default(now())
+  createdAt     DateTime          @default(now())
   subscriptions Subscription[]
   channels      UsersOnChannels[]
-  notifications Notification[]
 }
 
 model Subscription {
@@ -26,30 +26,56 @@ model Subscription {
   data      Json
   counter   Int      @default(0)
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userRef], references: [email])
+  user      User     @relation(fields: [userRef], references: [id])
   userRef   String
+}
+
+model Device {
+  id         String      @id @default(cuid())
+  name       String
+  createdAt  DateTime    @default(now())
+  channel    Channel     @relation(fields: [channelRef], references: [id])
+  channelRef String
+  telemetry  Telemetry[]
+
+  @@unique([channelRef, name])
+}
+
+model Telemetry {
+  id        String   @id @default(cuid())
+  moisture  Float    @db.Real
+  battery   Float    @db.Real
+  createdAt DateTime @default(now())
+  device    Device   @relation(fields: [deviceRef], references: [id])
+  deviceRef String
+
+  @@index([deviceRef, createdAt])
 }
 
 model Notification {
-  id        String   @id @default(cuid())
-  title     String
-  body      String
-  author    String
-  channel   String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userRef], references: [email])
-  userRef   String
+  id         String   @id @default(cuid())
+  title      String
+  body       String
+  author     String
+  createdAt  DateTime @default(now())
+  channel    Channel  @relation(fields: [channelRef], references: [id])
+  channelRef String
+
+  @@index([channelRef, createdAt])
 }
 
 model Channel {
-  name      String   @id
-  createdAt DateTime @default(now())
-  users     UsersOnChannels[]
+  id            String            @id @default(cuid())
+  name          String            @unique
+  createdAt     DateTime          @default(now())
+  users         UsersOnChannels[]
+  devices       Device[]
+  notifications Notification[]
 }
 
 model UsersOnChannels {
-  user       User    @relation(fields: [userRef], references: [email])
-  channel    Channel @relation(fields: [channelRef], references: [name])
+  user       User    @relation(fields: [userRef], references: [id])
+  channel    Channel @relation(fields: [channelRef], references: [id])
   userRef    String
   channelRef String
 

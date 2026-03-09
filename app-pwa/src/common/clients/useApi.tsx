@@ -1,14 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   type NewUser,
-  type UserMessage,
+  type Message,
   type UpdateUser,
   type FullUser,
   type User,
+  type Notification,
+  type TelemetryReading,
   NotificationAction,
 } from 'app-shared';
 
 const URL_API_NOTIFICATIONS = '/api/notifications';
+const URL_API_TELEMETRY = '/api/telemetry';
 const URL_API_USERS = '/api/users';
 
 export default function useApi() {
@@ -23,7 +26,36 @@ export default function useApi() {
         return data.user as FullUser;
       },
       enabled: !!userRef,
-      refetchInterval: 2000,
+    });
+  };
+
+  const useNotifications = (channelRef: string | null) => {
+    return useQuery({
+      queryKey: ['notifications', channelRef],
+      queryFn: async () => {
+        const res = await fetch(
+          `${URL_API_NOTIFICATIONS}?channelRef=${channelRef}`,
+        );
+        const data = await handleResponse(res);
+        return data.notifications as Notification[];
+      },
+      enabled: !!channelRef,
+      refetchInterval: 5000, // 5s
+    });
+  };
+
+  const useTelemetry = (channelRef: string | null) => {
+    return useQuery({
+      queryKey: ['telemetry', channelRef],
+      queryFn: async () => {
+        const res = await fetch(
+          `${URL_API_TELEMETRY}?channelRef=${channelRef}`,
+        );
+        const data = await handleResponse(res);
+        return data.telemetry as TelemetryReading[];
+      },
+      enabled: !!channelRef,
+      refetchInterval: 60000, // 60s
     });
   };
 
@@ -57,14 +89,12 @@ export default function useApi() {
   });
 
   const sendMessage = useMutation({
-    mutationFn: async (message: UserMessage) => {
+    mutationFn: async (message: Message) => {
       const res = await fetch(
         `${URL_API_NOTIFICATIONS}?action=${NotificationAction.send}`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(message),
         },
       );
@@ -72,7 +102,14 @@ export default function useApi() {
     },
   });
 
-  return { upsertUser, removeUser, useUser, sendMessage };
+  return {
+    upsertUser,
+    removeUser,
+    useUser,
+    useNotifications,
+    useTelemetry,
+    sendMessage,
+  };
 }
 
 function handleResponse(res: Response): Promise<ResponseData> {
@@ -87,4 +124,6 @@ function handleResponse(res: Response): Promise<ResponseData> {
 type ResponseData = {
   success: boolean;
   user?: FullUser | User;
+  notifications?: Notification[];
+  telemetry?: TelemetryReading[];
 };

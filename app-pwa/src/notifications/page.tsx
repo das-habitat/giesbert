@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Share, ExternalLink } from 'lucide-react';
-import { type UserNotification } from 'app-shared';
+import { type Notification } from 'app-shared';
 import { Button, Input, Header, Card } from '../common/ui-components';
 import { useAccount, usePushService } from './hooks';
 import { useApi } from '../common/clients';
@@ -115,6 +115,9 @@ const content = {
 export default function NotificationsPage() {
   const { isGranted } = usePushService();
   const { user, isLoading } = useAccount();
+  const channelRef = user?.channels?.[0]?.channel?.name ?? null;
+  const { useNotifications } = useApi();
+  const { data: notifications = [] } = useNotifications(channelRef);
 
   return (
     <div>
@@ -132,10 +135,10 @@ export default function NotificationsPage() {
               <h3 className="text-2xl font-bold mb-6">
                 {content.notifications.title}
               </h3>
-              {user.notifications.length > 0 ? (
+              {notifications.length > 0 ? (
                 <div className="flex flex-col gap-4">
-                  {user.notifications.map(
-                    (notification: UserNotification, idx: number) => (
+                  {notifications.map(
+                    (notification: Notification, idx: number) => (
                       <Card
                         key={idx}
                         className="bg-pink-400 text-pretty border-3 border-black"
@@ -146,7 +149,7 @@ export default function NotificationsPage() {
                         </p>
                         <p className="text-lg">{notification.body}</p>
                         <div className="text-xs font-medium text-right -mb-2">
-                          {`Von: ${notification?.author} / Kanal: ${notification?.channel} / Datum: ${new Date(notification?.createdAt)?.toLocaleString('de-DE')}`}
+                          {`Von: ${notification.author} / Datum: ${new Date(notification.createdAt).toLocaleString('de-DE')}`}
                         </div>
                       </Card>
                     ),
@@ -275,7 +278,9 @@ function AccountSection({ className, isSetup = false }: AccountSectionProps) {
   const { user, login, subscribe, unsubscribe, updateChannels } = useAccount();
   const [nickname, setNickname] = useState(user?.nickname || '');
   const [email, setEmail] = useState(user?.email || '');
-  const [channel, setChannel] = useState(user?.channels?.[0]?.channelRef ?? '');
+  const [channel, setChannel] = useState(
+    user?.channels?.[0]?.channel?.name ?? '',
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
 
@@ -438,8 +443,8 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
       await sendMessage.mutateAsync({
         title: 'Testnachricht',
         body: message,
-        userRef: user!.email,
-        channelRef: user!.channels[0].channelRef,
+        author: user!.nickname,
+        channelRef: user!.channels[0].channel.name,
       });
     } catch (error) {
       alert(content.error.network);

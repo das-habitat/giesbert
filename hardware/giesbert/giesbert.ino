@@ -10,15 +10,10 @@
 // ========== NETWORK SETTINGS ==========
 #define PORTAL_TIMEOUT 120 // 120 = 2 minutes
 #define AP_ID "giesbert"
-// Push Notifications (optional)
-// Requires that the user has installed the pwa: https://giesbert.das-habitat.de 
 #define DEVICE_NAME "Beispielpflanze" // --> CHANGE ME PLS <--
-#define PUSH_API "https://giesbert.das-habitat.de/api/notifications?action=send"
-#define USER_REF "beispiel@mail.de" // --> CHANGE ME PLS <--
-#define CHANNEL_REF "beispielkanal" // --> CHANGE ME PLS <--
-// IoT Dashboard (optional)
-// Requires that the user has an account: https://thingsboard.io/docs/user-guide/install/installation-options/?ceInstallType=liveDemo
-#define THINGS_API "https://eu.thingsboard.cloud/api/v1/BEISPIELTOKEN/telemetry" // ThingsBoard device token URL // --> CHANGE ME PLS <--
+#define CHANNEL_REF "beispielkanal"   // --> CHANGE ME PLS <--
+#define NOTIFICATION_API "https://giesbert.das-habitat.de/api/notifications?action=send"
+#define TELEMETRY_API "https://giesbert.das-habitat.de/api/telemetry"
 
 // ========== MEASUREMENT SETTINGS ==========
 #define TIME_TO_SLEEP 3600 // 300 = 5 minutes, 3600 = 1 hour
@@ -148,31 +143,32 @@ void sendNotification(String message) {
     return;
   }
   HTTPClient http;
-  http.begin(PUSH_API);
+  http.begin(NOTIFICATION_API);
   http.addHeader("Content-Type", "application/json");
   String json = "{";
-  json += "\"userRef\": \"" + String(USER_REF) + "\",";
   json += "\"channelRef\": \"" + String(CHANNEL_REF) + "\",";
-  json += "\"title\": \"" + String(DEVICE_NAME) + "\",";
-  json += "\"body\": \"" + String(message) + "\"";
+  json += "\"title\": \"" + String(DEVICE_NAME) + " – Tagesbericht\",";
+  json += "\"body\": \"" + String(message) + "\",";
+  json += "\"author\": \"" + String(DEVICE_NAME) + "\"";
   json += "}";
   int httpResponseCode = http.POST(json);
   Serial.println("Notification response: " + String(httpResponseCode));
   http.end();
 }
 
-// (optional)
 void sendTelemetry(float moisturePercent, int batteryPercent) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected, skipping telemetry.");
     return;
   }
   HTTPClient http;
-  http.begin(THINGS_API);
+  http.begin(TELEMETRY_API);
   http.addHeader("Content-Type", "application/json");
   String json = "{";
-  json += "\"moisture\":" + String(moisturePercent, 2) + ",";
-  json += "\"battery\":" + String(batteryPercent);
+  json += "\"channelRef\": \"" + String(CHANNEL_REF) + "\",";
+  json += "\"deviceName\": \"" + String(DEVICE_NAME) + "\",";
+  json += "\"moisture\": " + String(moisturePercent, 1) + ",";
+  json += "\"battery\": " + String(batteryPercent);
   json += "}";
   int httpResponseCode = http.POST(json);
   Serial.println("Telemetry response: " + String(httpResponseCode));

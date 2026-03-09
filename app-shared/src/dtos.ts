@@ -1,10 +1,10 @@
 import * as z from 'zod';
 
 export const MessageSchema = z.object({
-    userRef: z.email(),
     channelRef: z.string(),
     title: z.string().min(1).max(100),
     body: z.string().min(1).max(500),
+    author: z.string(),
 });
 
 export const SubscriptionSchema = z.object({
@@ -29,34 +29,56 @@ export const NewUserSchema = z.object({
     subscription: SubscriptionSchema,
 });
 
-export const UserNotificationSchema = z.object({
-    userRef: z.string(),
-    createdAt: z.date(),
-    channel: z.string(),
+export const TelemetrySchema = z.object({
+    channelRef: z.string(),
+    deviceName: z.string(),
+    moisture: z.number().min(0).max(100),
+    battery: z.number().min(0).max(100),
+});
+
+export const TelemetryReadingSchema = z.object({
     id: z.string(),
+    deviceRef: z.string(),
+    moisture: z.number(),
+    battery: z.number(),
+    createdAt: z.date(),
+    device: z.object({ name: z.string() }),
+});
+
+export const NotificationSchema = z.object({
+    id: z.string(),
+    channelRef: z.string(),
+    createdAt: z.date(),
     title: z.string(),
     body: z.string(),
     author: z.string(),
 });
 
+export const ChannelSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+});
 
 export const UserSchema = z.object({
+    id: z.string(),
     email: z.string(),
     nickname: z.string(),
 });
 
 export const FullUserSchema = UserSchema.extend({
     channels: z.array(z.object({
-        userRef: z.string(),
         channelRef: z.string(),
+        channel: ChannelSchema,
     })),
-    notifications: z.array(UserNotificationSchema),
-})
+});
 
 export type Subscription = z.infer<typeof SubscriptionSchema>;
 export type NewUser = z.infer<typeof NewUserSchema>;
 export type UpdateUser = z.infer<typeof UpdateUserSchema>;
-export type UserMessage = z.infer<typeof MessageSchema>;
-export type UserNotification = z.infer<typeof UserNotificationSchema>;
+export type Message = z.infer<typeof MessageSchema>;
+export type Telemetry = z.infer<typeof TelemetrySchema>;
+export type TelemetryReading = z.infer<typeof TelemetryReadingSchema>;
+export type Notification = z.infer<typeof NotificationSchema>;
+export type Channel = z.infer<typeof ChannelSchema>;
 export type User = z.infer<typeof UserSchema>;
 export type FullUser = z.infer<typeof FullUserSchema>;

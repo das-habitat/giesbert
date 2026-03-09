@@ -1,6 +1,6 @@
 {
   "name": "giesbert",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Smart plant watering system",
   "main": "index.js",
   "author": "Michael Schwarz",
