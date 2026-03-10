@@ -78,6 +78,7 @@ export type UpdateUser = z.infer<typeof UpdateUserSchema>;
 export type Message = z.infer<typeof MessageSchema>;
 export type Telemetry = z.infer<typeof TelemetrySchema>;
 export type TelemetryReading = z.infer<typeof TelemetryReadingSchema>;
+export type DeviceTelemetry = TelemetryReading[];
 export type Notification = z.infer<typeof NotificationSchema>;
 export type Channel = z.infer<typeof ChannelSchema>;
 export type User = z.infer<typeof UserSchema>;

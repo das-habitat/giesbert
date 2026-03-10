@@ -6,7 +6,7 @@ import {
   type FullUser,
   type User,
   type Notification,
-  type TelemetryReading,
+  type DeviceTelemetry,
   NotificationAction,
 } from 'app-shared';
 
@@ -52,7 +52,7 @@ export default function useApi() {
           `${URL_API_TELEMETRY}?channelRef=${channelRef}`,
         );
         const data = await handleResponse(res);
-        return data.telemetry as TelemetryReading[];
+        return data.telemetry as DeviceTelemetry[];
       },
       enabled: !!channelRef,
       refetchInterval: 60000, // 60s
@@ -125,5 +125,5 @@ type ResponseData = {
   success: boolean;
   user?: FullUser | User;
   notifications?: Notification[];
-  telemetry?: TelemetryReading[];
+  telemetry?: DeviceTelemetry[];
 };

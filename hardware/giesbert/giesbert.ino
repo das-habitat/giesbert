@@ -136,7 +136,6 @@ void setupWiFi() {
   }
 }
 
-// (optional)
 void sendNotification(String message) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected, skipping notification.");

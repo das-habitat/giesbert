@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Share, ExternalLink } from 'lucide-react';
-import { type Notification } from 'app-shared';
-import { Button, Input, Header, Card } from '../common/ui-components';
+import { type Notification, TelemetryKey } from 'app-shared';
+import {
+  Button,
+  Input,
+  Header,
+  Card,
+  LoaderCard,
+} from '../common/ui-components';
 import { useAccount, usePushService } from './hooks';
 import { useApi } from '../common/clients';
-import { LoaderCard, StatusCard } from './components';
+import { AreaChart, StatusCard } from './components';
 
 const content = {
   setup: {
@@ -42,6 +48,17 @@ const content = {
         title: 'Schade Marmelade',
         text: 'Du hast die Berechtigungen für Push-Benachrichtigungen in deinen Browsereinstellungen deaktiviert. Bitte aktiviere sie, um Push-Benachrichtigungen zu erhalten.',
       },
+    },
+  },
+  telemetry: {
+    title: 'Messwerte',
+    battery: {
+      title: 'Akkustand',
+      unit: 'SoC',
+    },
+    moisture: {
+      title: 'Bodenfeuchte',
+      unit: 'VWC',
     },
   },
   account: {
@@ -112,7 +129,7 @@ const content = {
   },
 } as const;
 
-export default function NotificationsPage() {
+export default function DashboardPage() {
   const { isGranted } = usePushService();
   const { user, isLoading } = useAccount();
   const channelRef = user?.channels?.[0]?.channel?.name ?? null;
@@ -172,6 +189,12 @@ export default function NotificationsPage() {
                   }
                 />
               )}
+            </Card>
+            <Card className="bg-olive-300 mb-6" size="small">
+              <h3 className="text-2xl font-bold mb-6">
+                {content.telemetry.title}
+              </h3>
+              <TelemetrySection channelRef={channelRef} />
             </Card>
             <Card className="bg-olive-300" size="small">
               <h3 className="text-2xl font-bold mb-6">
@@ -498,11 +521,50 @@ function TestingSection({ className }: React.HTMLAttributes<HTMLDivElement>) {
   );
 }
 
+function TelemetrySection({ className, channelRef }: TelemetrySectionProps) {
+  const { useTelemetry } = useApi();
+  const { data: telemetryPerDevice = [] } = useTelemetry(channelRef);
+
+  return telemetryPerDevice.map((telemetry) => (
+    <Card
+      className={`relative bg-pink-400 border-3 border-black ${className}`}
+      size="small"
+    >
+      <h3 className="font-bold text-xl mb-4 text-black">
+        {telemetry[0].device.name}
+      </h3>
+      <h4 className="font-bold text-l mb-2 text-black">
+        {content.telemetry.moisture.title}
+      </h4>
+      <AreaChart
+        className="mb-2"
+        data={telemetry}
+        valueName={content.telemetry.moisture.unit}
+        dataKey={TelemetryKey.moisture}
+      />
+      <h4 className="font-bold text-l mb-2 text-black">
+        {content.telemetry.battery.title}
+      </h4>
+      <AreaChart
+        className=""
+        data={telemetry}
+        valueName={content.telemetry.battery.unit}
+        dataKey={TelemetryKey.battery}
+      />
+    </Card>
+  ));
+}
+
 type BeforeInstallPromptEvent = {
   prompt(): Promise<void>;
 } & Event;
 
 type AccountSectionProps = Readonly<{
   isSetup?: boolean;
+}> &
+  React.HTMLAttributes<HTMLDivElement>;
+
+type TelemetrySectionProps = Readonly<{
+  channelRef: string | null;
 }> &
   React.HTMLAttributes<HTMLDivElement>;

@@ -53,12 +53,16 @@ export class DevicesService {
     if (!channel)
       throw new NotFoundException(`Channel not found: ${channelRef}`);
     const deviceIds = channel.devices.map((d) => d.id);
-    const readings = await this.prisma.telemetry.findMany({
-      where: { deviceRef: { in: deviceIds } },
-      orderBy: { createdAt: 'desc' },
-      take: limit,
-      include: { device: { select: { name: true } } },
-    });
-    return { success: true, readings };
+    const telemetryPerDevice = await Promise.all(
+      deviceIds.map((id) =>
+        this.prisma.telemetry.findMany({
+          where: { deviceRef: id },
+          orderBy: { createdAt: 'desc' },
+          take: limit,
+          include: { device: { select: { name: true } } },
+        }),
+      ),
+    );
+    return { success: true, telemetry: telemetryPerDevice };
   }
 }
