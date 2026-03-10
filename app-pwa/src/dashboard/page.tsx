@@ -179,13 +179,13 @@ export default function DashboardPage() {
                   data={
                     isGranted !== 'denied'
                       ? {
-                          title: content.notifications.status.empty.title,
-                          message: content.notifications.status.empty.text,
-                        }
+                        title: content.notifications.status.empty.title,
+                        message: content.notifications.status.empty.text,
+                      }
                       : {
-                          title: content.notifications.status.settings.title,
-                          message: content.notifications.status.settings.text,
-                        }
+                        title: content.notifications.status.settings.title,
+                        message: content.notifications.status.settings.text,
+                      }
                   }
                 />
               )}
@@ -525,34 +525,36 @@ function TelemetrySection({ className, channelRef }: TelemetrySectionProps) {
   const { useTelemetry } = useApi();
   const { data: telemetryPerDevice = [] } = useTelemetry(channelRef);
 
-  return telemetryPerDevice.map((telemetry) => (
-    <Card
-      className={`relative bg-pink-400 border-3 border-black ${className}`}
-      size="small"
-    >
-      <h3 className="font-bold text-xl mb-4 text-black">
-        {telemetry[0].device.name}
-      </h3>
-      <h4 className="font-bold text-l mb-2 text-black">
-        {content.telemetry.moisture.title}
-      </h4>
-      <AreaChart
-        className="mb-2"
-        data={telemetry}
-        valueName={content.telemetry.moisture.unit}
-        dataKey={TelemetryKey.moisture}
-      />
-      <h4 className="font-bold text-l mb-2 text-black">
-        {content.telemetry.battery.title}
-      </h4>
-      <AreaChart
-        className=""
-        data={telemetry}
-        valueName={content.telemetry.battery.unit}
-        dataKey={TelemetryKey.battery}
-      />
-    </Card>
-  ));
+  return telemetryPerDevice
+    .filter((i) => i.length > 0)
+    .map((telemetry) => (
+      <Card
+        className={`relative bg-pink-400 border-3 border-black ${className}`}
+        size="small"
+      >
+        <h3 className="font-bold text-xl mb-4 text-black">
+          {telemetry[0].device.name}
+        </h3>
+        <h4 className="font-bold text-l mb-2 text-black">
+          {content.telemetry.moisture.title}
+        </h4>
+        <AreaChart
+          className="mb-2"
+          data={telemetry}
+          valueName={content.telemetry.moisture.unit}
+          dataKey={TelemetryKey.moisture}
+        />
+        <h4 className="font-bold text-l mb-2 text-black">
+          {content.telemetry.battery.title}
+        </h4>
+        <AreaChart
+          className=""
+          data={telemetry}
+          valueName={content.telemetry.battery.unit}
+          dataKey={TelemetryKey.battery}
+        />
+      </Card>
+    ));
 }
 
 type BeforeInstallPromptEvent = {
