@@ -229,7 +229,7 @@ void setup() {
     sendTelemetry(avgMoisture, avgBattery);
 
     // Optional: Only send notifications, if values reach a specific point, like (avgMoisture < 20 || avgBattery < 10)
-    String msg = "bibup bibup – Bodenfeuchte: " + String(avgMoisture, 0) + "%, Batterie: " + String(avgBattery) + "%";
+    String msg = "bibup bibup – Bodenfeuchte: " + String(avgMoisture, 0) + "%, Akkustand: " + String(avgBattery) + "%";
     sendNotification(msg);
 
     resetValues();
