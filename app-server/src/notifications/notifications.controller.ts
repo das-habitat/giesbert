@@ -16,11 +16,11 @@ export class NotificationsController {
   @Get()
   async get(
     @Query('channelRef') channelRef: string,
-    @Query('limit') limit?: string,
+    @Query('limit') limit = '5',
   ) {
     return this.notificationsService.getNotifications(
       channelRef,
-      limit ? parseInt(limit) : 5,
+      parseInt(limit),
     );
   }
 

@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { DevicesService } from './devices.service';
+
 @Controller('telemetry')
 export class DevicesController {
   constructor(private readonly devicesService: DevicesService) {}
@@ -12,11 +13,8 @@ export class DevicesController {
   @Get()
   async get(
     @Query('channelRef') channelRef: string,
-    @Query('limit') limit?: string,
+    @Query('limit') limit = '14',
   ) {
-    return this.devicesService.getTelemetry(
-      channelRef,
-      limit ? parseInt(limit) : 24,
-    );
+    return this.devicesService.getTelemetry(channelRef, parseInt(limit));
   }
 }

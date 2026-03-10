@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class DevicesService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async addTelemetry(body: unknown) {
     const result = TelemetrySchema.safeParse(body);
