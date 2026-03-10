@@ -8,7 +8,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class DevicesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async addTelemetry(body: unknown) {
     const result = TelemetrySchema.safeParse(body);
@@ -37,7 +37,7 @@ export class DevicesService {
   }
 
   async deleteOldTelemetry() {
-    const maxLifetime = 14 * 24 * 60 * 60 * 1000; // 14 days
+    const maxLifetime = 5 * 24 * 60 * 60 * 1000; // 5 days
     await this.prisma.telemetry.deleteMany({
       where: {
         createdAt: { lt: new Date(Date.now() - maxLifetime) },

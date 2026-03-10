@@ -32,7 +32,7 @@ export class NotificationsService {
   }
 
   async deleteOldNotifications() {
-    const maxLifetime = 14 * 24 * 60 * 60 * 1000; // 14 days
+    const maxLifetime = 5 * 24 * 60 * 60 * 1000; // 5 days
     await this.prisma.notification.deleteMany({
       where: {
         createdAt: { lt: new Date(Date.now() - maxLifetime) },
