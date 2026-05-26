@@ -7,7 +7,7 @@
 * Grafana for dashboard
 * ntfy for push notifications
 * qwik as frontend framework for website
-* Arduiono IDE with ESP32S3 contorller
+* Arduiono IDE with ESP32S3 microcontroller
 
 ## Deployment
 
