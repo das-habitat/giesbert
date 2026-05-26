@@ -1,11 +1,12 @@
 (common) {
     encode gzip
+	
     header {
-      Strict-Transport-Security "max-age=31536000;"
-      X-XSS-Protection "1; mode=block"
-      X-Frame-Options "DENY"
-      X-Robots-Tag "none"
-      -Server
+	  Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always
+	  X-Content-Type-Options "nosniff" always
+	  X-Frame-Options "SAMEORIGIN" always
+	  Referrer-Policy "no-referrer" always
+	  Permissions-Policy "interest-cohort=(), payment=()" always
     }
 }
 

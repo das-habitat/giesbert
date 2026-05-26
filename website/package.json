@@ -1,0 +1,18 @@
+{
+  "name": "website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "serve dist"
+  },
+  "devDependencies": {
+    "serve": "^14.2.6",
+    "vite": "^7.1.9"
+  },
+  "dependencies": {
+    "@builder.io/qwik": "^1.19.2"
+  }
+}

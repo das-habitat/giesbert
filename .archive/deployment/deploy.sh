@@ -31,6 +31,14 @@ fi
 # --- Registry Login (GitHub Container Registry) ---
 echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin "ghcr.io"
 
+# --- Docker Secrets ---
+if ! docker secret inspect shepherd_registry_password &>/dev/null; then
+  echo "$REGISTRY_PASSWORD" | docker secret create shepherd_registry_password -
+  echo "Created Docker secret: shepherd_registry_password"
+else
+  echo "Docker secret already exists (skipped): shepherd_registry_password"
+fi
+
 # --- Deploy Stack ---
 echo "Deploying stack '$STACK_NAME'..."
 docker stack deploy -c "$STACK_FILE" --with-registry-auth --detach "$STACK_NAME"

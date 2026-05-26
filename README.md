@@ -1,28 +1,23 @@
 # giesbert
 
-<img alt="giesbert-logo" src="./.docs/giesbert-logo.svg" width="auto" height="100px"></img>
+<img alt="giesbert-logo" src="./docs/giesbert-logo.svg" width="auto" height="100px"></img>
 
-## [PNPM Workspace](https://pnpm.io/workspaces)
+## Main Technology
 
-- [/app-pwa](/app-pwa/)
-- [/app-server](/app-server/)
-- [/app-shared](/app-shared/)
-
-## Local Development
-
-You need [Docker](https://www.docker.com) and [Taskfile](https://taskfile.dev) installed on your compouter.
-
-1. Run `task dev`
-2. Open Chrome `localhost:5173`
-3. Install the PWA and accept push notifications
-4. Register new account
+* Grafana for dashboard
+* Ntfy for push notifications
+* Quirk as frontend framework for website
+* Arduiono IDE with ESP32S3 contorller
 
 ## Deployment
 
-- [/deployment](/deployment/)
+1. `docker swarm init`
+2. `docker stack deploy -c docker-stack.yml --with-registry-auth --detach giesbert`
+3. (optional) `docker stack rm giesbert`, to stop the stack
 
-## Hardware
+## Misc
 
-Arduino IDE project.
-
-- [/hardware](/hardware/)
+* [Embedded Rust setup #1](https://www.youtube.com/watch?v=TOAynddiu5M)
+* [Embedded Rust setup #2](https://youtu.be/dxgufYRcNDg?t=467)
+* [Microcontroller overview](https://www.youtube.com/watch?v=KzKw_483pbI)
+* [ESP32 overview](https://www.youtube.com/watch?v=CfIjInYch7U)

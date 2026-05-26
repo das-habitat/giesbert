@@ -7,6 +7,7 @@ import {
   Header,
   Card,
   LoaderCard,
+  CollapseCard,
 } from '../common/ui-components';
 import { useAccount, usePushService } from './hooks';
 import { useApi } from '../common/clients';
@@ -525,16 +526,18 @@ function TelemetrySection({ className, channelRef }: TelemetrySectionProps) {
   const { useTelemetry } = useApi();
   const { data: telemetryPerDevice = [] } = useTelemetry(channelRef);
 
-  return telemetryPerDevice
+  const dump = [[{ "id": "cmmq4ur7v002g2do5o5lah38x", "moisture": 55.9, "battery": 62, "createdAt": "2026-03-14T09:38:15.499Z", "deviceRef": "cmmji8m0800042dmr2kxgbf3d", "device": { "name": "Geigenfeige" } }, { "id": "cmmq2pydv002e2do5tbols4no", "moisture": 55.5, "battery": 63, "createdAt": "2026-03-14T08:38:32.275Z", "deviceRef": "cmmji8m0800042dmr2kxgbf3d", "device": { "name": "Geigenfeige" } }, { "id": "cmmq0l60j002d2do54j2g73ds", "moisture": 55.2, "battery": 63, "createdAt": "2026-03-14T07:38:49.651Z", "deviceRef": "cmmji8m0800042dmr2kxgbf3d", "device": { "name": "Geigenfeige" } }, { "id": "cmmpygnox002c2do529gqpoa8", "moisture": 55, "battery": 63, "createdAt": "2026-03-14T06:39:20.049Z", "deviceRef": "cmmji8m0800042dmr2kxgbf3d", "device": { "name": "Geigenfeige" } }, { "id": "cmmpwbrub002b2do5guruy97b", "moisture": 54.5, "battery": 62, "createdAt": "2026-03-14T05:39:32.915Z", "deviceRef": "cmmji8m0800042dmr2kxgbf3d", "device": { "name": "Geigenfeige" } }]]
+
+  return dump
     .filter((i) => i.length > 0)
     .map((telemetry) => (
-      <Card
+      <CollapseCard title={telemetry[0].device.name}
         className={`relative bg-pink-400 border-3 border-black ${className}`}
         size="small"
       >
-        <h3 className="font-bold text-xl mb-4 text-black">
+        {/* <h3 className="font-bold text-xl mb-4 text-black">
           {telemetry[0].device.name}
-        </h3>
+        </h3> */}
         <h4 className="font-bold text-l mb-2 text-black">
           {content.telemetry.moisture.title}
         </h4>
@@ -553,7 +556,7 @@ function TelemetrySection({ className, channelRef }: TelemetrySectionProps) {
           valueName={content.telemetry.battery.unit}
           dataKey={TelemetryKey.battery}
         />
-      </Card>
+      </CollapseCard>
     ));
 }
 
