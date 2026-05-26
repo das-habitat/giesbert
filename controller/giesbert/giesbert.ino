@@ -10,10 +10,10 @@
 // ========== NETWORK SETTINGS ==========
 #define PORTAL_TIMEOUT 120 // 120 = 2 minutes
 #define AP_ID "giesbert"
-#define DEVICE_NAME "Beispielpflanze" // --> CHANGE ME PLS <--
-#define CHANNEL_REF "beispielkanal"   // --> CHANGE ME PLS <--
-#define NOTIFICATION_API "https://giesbert.das-habitat.de/api/notifications?action=send"
-#define TELEMETRY_API "https://giesbert.das-habitat.de/api/telemetry"
+#define NOTIFY_TOPIC "beispielkanal"   // --> CHANGE ME PLS <--
+#define NOTIFY_URL "https://notify.giesbert.das-habitat.de"
+#define METRICS_URL "https://metrics.giesbert.das-habitat.de/api/v1/import/prometheus"
+#define METRICS_ID "beispielsensor"   // --> CHANGE ME PLS <--
 
 // ========== MEASUREMENT SETTINGS ==========
 #define TIME_TO_SLEEP 3600 // 300 = 5 minutes, 3600 = 1 hour
@@ -132,23 +132,24 @@ void setupWiFi() {
     shutdownAndSleep();
   } else {
     Serial.println("WiFi connected via WiFiManager.");
-    sendNotification("bibup bibup – Gerät erfolgreich eingerichtet.");
+    sendNotification("bibup bibup – Gerät erfolgreich eingerichtet.", "giesbert – Setup", "[\"white_check_mark\",\"raised_hands\"]");
   }
 }
 
-void sendNotification(String message) {
+void sendNotification(String message, String title, String tags) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected, skipping notification.");
     return;
   }
   HTTPClient http;
-  http.begin(NOTIFICATION_API);
+  http.begin(NOTIFY_URL);
   http.addHeader("Content-Type", "application/json");
   String json = "{";
-  json += "\"channelRef\": \"" + String(CHANNEL_REF) + "\",";
-  json += "\"title\": \"" + String(DEVICE_NAME) + " – Tagesbericht\",";
-  json += "\"body\": \"" + String(message) + "\",";
-  json += "\"author\": \"" + String(DEVICE_NAME) + "\"";
+  json += "\"topic\": \"" + String(NOTIFY_TOPIC) + "\",";
+  json += "\"title\": \"" + title + "\",";
+  json += "\"message\": \"" + message + "\",";
+  json += "\"tags\": " + tags + ",";
+  json += "\"priority\": " + String(5);
   json += "}";
   int httpResponseCode = http.POST(json);
   Serial.println("Notification response: " + String(httpResponseCode));
@@ -161,15 +162,12 @@ void sendTelemetry(float moisturePercent, int batteryPercent) {
     return;
   }
   HTTPClient http;
-  http.begin(TELEMETRY_API);
-  http.addHeader("Content-Type", "application/json");
-  String json = "{";
-  json += "\"channelRef\": \"" + String(CHANNEL_REF) + "\",";
-  json += "\"deviceName\": \"" + String(DEVICE_NAME) + "\",";
-  json += "\"moisture\": " + String(moisturePercent, 1) + ",";
-  json += "\"battery\": " + String(batteryPercent);
-  json += "}";
-  int httpResponseCode = http.POST(json);
+  http.begin(METRICS_URL);
+  http.addHeader("Content-Type", "text/plain");
+  String body = "";
+  body += "moisture_percent{device=\"" + String(METRICS_ID) + "\"} " + String(moisturePercent, 1) + "\n";
+  body += "battery_percent{device=\"" + String(METRICS_ID) + "\"} " + String(batteryPercent) + "\n";
+  int httpResponseCode = http.POST(body);
   Serial.println("Telemetry response: " + String(httpResponseCode));
   http.end();
 }
@@ -225,12 +223,12 @@ void setup() {
     float avgMoisture = sumMoisture / (float)MAX_VALUES;
     int avgBattery = sumBattery / MAX_VALUES;
   
-    Serial.println("Daily avg – Moisture: " + String(avgMoisture, 1) + "%, Battery: " + String(avgBattery) + "%");
+    Serial.println("Daily avg – Moisture (VWC): " + String(avgMoisture, 0) + "%, Battery (SoC): " + String(avgBattery) + "%");
     sendTelemetry(avgMoisture, avgBattery);
 
     // Optional: Only send notifications, if values reach a specific point, like (avgMoisture < 20 || avgBattery < 10)
-    String msg = "bibup bibup – Bodenfeuchte: " + String(avgMoisture, 0) + "%, Akkustand: " + String(avgBattery) + "%";
-    sendNotification(msg);
+    String msg = "Bodenfeuchte (VWC): " + String(avgMoisture, 0) + "%, Akkustand (SoC): " + String(avgBattery) + "%";
+    sendNotification(msg, "giesbert – Tagesbericht", "[\"droplet\",\"zap\"]");
 
     resetValues();
   }
