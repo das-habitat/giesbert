@@ -1,4 +1,4 @@
-# giesbert Hardware
+# Arduino IDE Project
 
 This project is inspired by [hpi_smart_plants Open Source project](https://github.com/vektorious/hpi_smart_plants).
 
@@ -6,7 +6,7 @@ This project is inspired by [hpi_smart_plants Open Source project](https://githu
 
 * [Getting Started](https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/)
 
-## Knowhow
+## Misc
 
 * [Embedded Rust setup #1](https://www.youtube.com/watch?v=TOAynddiu5M)
 * [Embedded Rust setup #2](https://youtu.be/dxgufYRcNDg?t=467)
