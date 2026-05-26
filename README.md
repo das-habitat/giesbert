@@ -5,8 +5,8 @@
 ## Main Technology
 
 * Grafana for dashboard
-* Ntfy for push notifications
-* Quirk as frontend framework for website
+* ntfy for push notifications
+* qwik as frontend framework for website
 * Arduiono IDE with ESP32S3 contorller
 
 ## Deployment
