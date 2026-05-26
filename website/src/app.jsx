@@ -4,7 +4,7 @@ import ntfyAppleIcon from './assets/badge-apple.ntfy.png'
 import ntfyGoogleIcon from './assets/badge-google.ntfy.png'
 import ntfyFDroidIcon from './assets/badge-fdroid.ntfy.svg'
 import ntfyLogo from './assets/logo-ntfy.svg'
-import grafanaLogo from './assets/logo-grafana.svg'
+import victoriaLogo from './assets/logo-victoria.jpeg'
 
 const content = {
   desc: {
@@ -52,19 +52,19 @@ const content = {
       }
     ],
     nav: {
-      link: "https://notifications.giesbert.das-habitat.de/",
+      href: "https://notify.giesbert.das-habitat.de/",
       text: "Zum ntfy Dashboard"
     }
   },
-  grafana: {
-    title: "Grafana",
+  victoria: {
+    title: "VictoriaMetrics",
     text: <>Die App veranschaulicht deine gesammelten Messwerte wie
       Bodenfeuchtigkeit und Temperatur deiner Pflanze. Dein Microcontroller speichert
-      regelmäßg Messwerte über HTTPS-Anfragen an den Server. Grafana erstellt aus diesen
-      Daten ein übersichtliches Dashboard mit hübschen Diagrammen.</>,
+      regelmäßg Messwerte über HTTPS-Anfragen an den Server. VictoriaMetrics erstellt
+      aus diesen Daten ein übersichtliches Dashboard.</>,
     nav: {
-      link: "https://monitoring.giesbert.das-habitat.de/",
-      text: "Zum Grafana Dashboard"
+      href: "https://metrics.giesbert.das-habitat.de/",
+      text: "Zum VictoriaMetrics Dashboard"
     }
   },
 }
@@ -117,19 +117,19 @@ export const App = component$(() => {
       <Card class="bg-livid-400 border-3 border-black mb-6">
         <div class="flex items-center gap-2.5 mb-3">
           <img
-            src={grafanaLogo}
+            src={victoriaLogo}
             alt="ntfy logo"
             width={36}
             height={36}
             class="shrink-0 rounded-lg"
           />
           <h2 class="text-2xl font-bold">
-            {content.grafana.title}
+            {content.victoria.title}
           </h2>
         </div>
-        <p class="text-lg mb-3">{content.grafana.text}</p>
-        <LinkButton class="bg-black text-white" href={content.grafana.nav.href}>
-          {content.grafana.nav.text}
+        <p class="text-lg mb-3">{content.victoria.text}</p>
+        <LinkButton class="bg-black text-white" href={content.victoria.nav.href}>
+          {content.victoria.nav.text}
         </LinkButton>
       </Card>
 

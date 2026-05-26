@@ -16,14 +16,14 @@
     }
 }
 
-notifications.{$SITE_ADDRESS} {
+notify.{$SITE_ADDRESS} {
     import common
     reverse_proxy ntfy:80
 }
 
-monitoring.{$SITE_ADDRESS} {
+metrics.{$SITE_ADDRESS} {
     import common
-    reverse_proxy grafana:3000
+    reverse_proxy victoriametrics:8428
 }
 
 {$SITE_ADDRESS} {
