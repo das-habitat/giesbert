@@ -1,36 +1,36 @@
+{
+	# global options
+}
+
 (common) {
     encode gzip
-	
+
     header {
 	  Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always
 	  X-Content-Type-Options "nosniff" always
 	  X-Frame-Options "SAMEORIGIN" always
-	  Referrer-Policy "no-referrer" always
-	  Permissions-Policy "interest-cohort=(), payment=()" always
+	  X-XSS-Protection "0" always
+	  Referrer-Policy "strict-origin-when-cross-origin" always
+	  Permissions-Policy "interest-cohort=()" always
+	  -Server
     }
 }
 
-ntfy.giesbert.das-habitat.de {
+notifications.{$SITE_ADDRESS} {
     import common
     reverse_proxy ntfy:80
 }
 
-grafana.giesbert.das-habitat.de {
+monitoring.{$SITE_ADDRESS} {
     import common
     reverse_proxy grafana:3000
 }
 
-giesbert.das-habitat.de {
+{$SITE_ADDRESS} {
 	import common
 	handle {
 		root * /srv
 		file_server
 		try_files {path} /index.html
 	}
-}
-
-# Catch all: Matches any other domain
-:443 {
-	import common
-	abort
 }
