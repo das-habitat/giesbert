@@ -17,7 +17,7 @@
 
 ## Testing
 
-### Push Notification
+### Notify
 
 ```bash
 curl https://notify.giesbert.das-habitat.de \
