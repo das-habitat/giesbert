@@ -4,11 +4,17 @@ set -euo pipefail
 STACK_NAME="giesbert"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMPOSE_FILE="$SCRIPT_DIR/docker-stack.yml"
+SERVER_CONFIG="$SCRIPT_DIR/ntfy/server.yml"
 
 # --- Load .env variables ---
 set -a
 source "$SCRIPT_DIR/.env.deploy"
 set +a
+
+# --- Set .env variables in server.yml ---
+TEMP_CONFIG=$(mktemp)
+envsubst < "$SERVER_CONFIG" > "$TEMP_CONFIG"
+mv "$TEMP_CONFIG" "$SERVER_CONFIG"
 
 # --- Init Swarm (skip if already active) ---
 if ! docker info &>/dev/null; then

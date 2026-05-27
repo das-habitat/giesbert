@@ -23,10 +23,9 @@ services:
     command: serve
     environment:
       - TZ=Europe/Berlin
-    # user: UID:GID # optional: replace with your own user/group or uid/gid
     volumes:
       - ntfy_cache:/var/cache/ntfy
-      - ntfy_config:/etc/ntfy
+      - $PWD/ntfy:/etc/ntfy
     ports:
       - 8080:80
     networks:
@@ -65,7 +64,6 @@ volumes:
   caddy_data:
   caddy_config:
   ntfy_cache:
-  ntfy_config:
   victoriametrics_data:
 
 networks:

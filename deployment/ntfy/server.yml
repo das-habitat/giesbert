@@ -1,0 +1,14 @@
+# https://docs.ntfy.sh/config/?h=server.yml
+
+# general
+base-url: "https://notify.${SITE_ADDRESS}"
+listen-http: ":80"
+cache-file: "/var/cache/ntfy/cache.db"
+attachment-cache-dir: "/var/cache/ntfy/attachments"
+behind-proxy: true
+
+# web push
+web-push-public-key: "${VAPID_PUBLIC_KEY}"
+web-push-private-key: "${VAPID_PRIVATE_KEY}"
+web-push-file: "/var/cache/ntfy/webpush.db"
+web-push-email-address: "${VAPID_MAIL_ADDRESS}"
