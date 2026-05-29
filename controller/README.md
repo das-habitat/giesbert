@@ -1,14 +1,14 @@
-# Arduino IDE Project
+# microCONTROLLER
 
-This project is inspired by [hpi_smart_plants Open Source project](https://github.com/vektorious/hpi_smart_plants).
+## Main Technology
 
-## XIAO ESP32_S3
-
-* [Getting Started](https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/)
+* [Arduiono IDE](https://docs.arduino.cc/software/ide/)
+* [ESP32S3](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html)
 
 ## Misc
 
-* [Embedded Rust setup #1](https://www.youtube.com/watch?v=TOAynddiu5M)
-* [Embedded Rust setup #2](https://youtu.be/dxgufYRcNDg?t=467)
 * [Microcontroller overview](https://www.youtube.com/watch?v=KzKw_483pbI)
 * [ESP32 overview](https://www.youtube.com/watch?v=CfIjInYch7U)
+* [Getting started](https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/)
+* [Embedded Rust setup #1](https://www.youtube.com/watch?v=TOAynddiu5M)
+* [Embedded Rust setup #2](https://youtu.be/dxgufYRcNDg?t=467)

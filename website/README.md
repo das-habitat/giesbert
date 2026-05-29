@@ -1,4 +1,4 @@
-# Qwik + Vite
+# WEBSITE
 
 ## Qwik in CSR mode
 

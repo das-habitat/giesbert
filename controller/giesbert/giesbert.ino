@@ -213,6 +213,10 @@ void setup() {
   // Initialize Wifi
   setupWiFi();
 
+  // Send telemetry (each TIME_TO_SLEEP)
+  Serial.println("Daily avg – Moisture (VWC): " + String(moisturePercent) + "%, Battery (SoC): " + String(batteryPercent) + "%");
+  sendTelemetry(moisturePercent, batteryPercent);
+
   // Send daily average (once MAX_VALUES readings are collected)
   if (measureCount >= MAX_VALUES) {
     long sumMoisture = 0, sumBattery = 0;
@@ -222,9 +226,6 @@ void setup() {
     }
     float avgMoisture = sumMoisture / (float)MAX_VALUES;
     int avgBattery = sumBattery / MAX_VALUES;
-  
-    Serial.println("Daily avg – Moisture (VWC): " + String(avgMoisture, 0) + "%, Battery (SoC): " + String(avgBattery) + "%");
-    sendTelemetry(avgMoisture, avgBattery);
 
     // Optional: Only send notifications, if values reach a specific point, like (avgMoisture < 20 || avgBattery < 10)
     String msg = "Bodenfeuchte (VWC): " + String(avgMoisture, 0) + "%, Akkustand (SoC): " + String(avgBattery) + "%";
