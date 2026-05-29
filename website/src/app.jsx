@@ -52,7 +52,7 @@ const content = {
       }
     ],
     nav: {
-      href: "https://notify.giesbert.das-habitat.de/",
+      href: "https://notify.giesbert.das-habitat.de/beispielkanal",
       text: "Zum ntfy Dashboard"
     }
   },
@@ -63,7 +63,7 @@ const content = {
       regelmäßg Messwerte über HTTPS-Anfragen an den Server. VictoriaMetrics erstellt
       aus diesen Daten ein übersichtliches Dashboard.</>,
     nav: {
-      href: "https://metrics.giesbert.das-habitat.de/",
+      href: "https://metrics.giesbert.das-habitat.de/vmui/#/?g0.expr=%7Bdevice%3D%22beispielsensor%22%7D",
       text: "Zum VictoriaMetrics Dashboard"
     }
   },
