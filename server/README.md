@@ -2,10 +2,9 @@
 
 ## Main Technology
 
+* [Caddy](https://caddyserver.com/docs/)
 * [VictoriaMetrics](https://docs.victoriametrics.com/victoriametrics/quick-start/)
 * [ntfy](https://docs.ntfy.sh/)
-* [Caddy](https://caddyserver.com/docs/)
-* [qwik](https://qwik.dev/docs/)
 
 ## Deployment
 
