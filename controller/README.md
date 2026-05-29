@@ -5,6 +5,10 @@
 * [Arduiono IDE](https://docs.arduino.cc/software/ide/)
 * [ESP32S3](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html)
 
+## Sensors
+
+* [Soil Moisture](https://www.youtube.com/watch?v=pFQaFnqpOtQ&t=161s)
+
 ## Misc
 
 * [Microcontroller overview](https://www.youtube.com/watch?v=KzKw_483pbI)
