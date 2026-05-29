@@ -5,12 +5,13 @@
 * [Caddy](https://caddyserver.com/docs/)
 * [VictoriaMetrics](https://docs.victoriametrics.com/victoriametrics/quick-start/)
 * [ntfy](https://docs.ntfy.sh/)
+* [Docker Swarm](https://docs.docker.com/engine/swarm/)
 
 ## Deployment
 
 VPS: ~4GB RAM / ~10GB DISK
 
-1. Build website and move files from `/dir` in `/website`
+1. Copy files from `/website/dir/` into `server/website/`
 2. Edit `.env.deploy`
 3. Start via `bash deploy.sh`
 4. (optional) Stop via `docker stack rm giesbert`
