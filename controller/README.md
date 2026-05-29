@@ -7,7 +7,7 @@
 
 ## Sensors
 
-* [Soil Moisture](https://www.youtube.com/watch?v=pFQaFnqpOtQ&t=161s)
+* [Soil Moisture](https://www.youtube.com/watch?v=pFQaFnqpOtQ)
 
 ## Misc
 
