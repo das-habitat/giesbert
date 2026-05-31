@@ -71,11 +71,11 @@ float readMoistureVoltage() {
   return Vraw / SAMPLES / 1000.0;
 }
 
-float moistureVoltageToPercent(float voltage) {
+int moistureVoltageToPercent(float voltage) {
   const float MIN_V = 0.5;
   const float MAX_V = 2.5;
   float percent = (MAX_V - voltage) / (MAX_V - MIN_V) * 100.0;
-  return constrain(percent, 0.0, 100.0);
+  return (int)constrain(percent, 0.0, 100.0);
 }
 
 // ========== SYSTEM FUNCTIONS ==========
@@ -156,7 +156,7 @@ void sendNotification(String message, String title, String tags) {
   http.end();
 }
 
-void sendTelemetry(float moisturePercent, int batteryPercent) {
+void sendTelemetry(int moisturePercent, int batteryPercent) {
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WiFi not connected, skipping telemetry.");
     return;
@@ -165,7 +165,7 @@ void sendTelemetry(float moisturePercent, int batteryPercent) {
   http.begin(METRICS_URL);
   http.addHeader("Content-Type", "text/plain");
   String body = "";
-  body += "moisture_percent{device=\"" + String(METRICS_ID) + "\"} " + String(moisturePercent, 1) + "\n";
+  body += "moisture_percent{device=\"" + String(METRICS_ID) + "\"} " + String(moisturePercent) + "\n";
   body += "battery_percent{device=\"" + String(METRICS_ID) + "\"} " + String(batteryPercent) + "\n";
   int httpResponseCode = http.POST(body);
   Serial.println("Telemetry response: " + String(httpResponseCode));
@@ -195,26 +195,26 @@ void setup() {
   digitalWrite(SENSOR_POWER_PIN, HIGH);
   delay(200);
   float moistureVoltage = readMoistureVoltage();
-  float moisturePercent = moistureVoltageToPercent(moistureVoltage);
+  int moisturePercent = moistureVoltageToPercent(moistureVoltage);
   digitalWrite(SENSOR_POWER_PIN, LOW);
-  Serial.println("Moisture: " + String(moisturePercent, 1) + "%");
+  Serial.println("READ moisture: " + String(moistureVoltage) + "V (" + String(moisturePercent) + "%)");
 
   // Read battery
   float batteryVoltage = readBatteryVoltage();
   int batteryPercent = batteryVoltageToPercent(batteryVoltage);
-  Serial.println("Battery: " + String(batteryVoltage, 2) + "V (" + String(batteryPercent) + "%)");
+  Serial.println("READ battery: " + String(batteryVoltage) + "V (" + String(batteryPercent) + "%)");
 
   // Store in RTC arrays
-  moistureValues[measureCount] = (int)moisturePercent;
+  moistureValues[measureCount] = moisturePercent;
   batteryValues[measureCount] = batteryPercent;
   measureCount++;
-  Serial.println("Measurement " + String(measureCount) + "/" + String(MAX_VALUES));
+  Serial.println("COUNT measurement: " + String(measureCount) + "/" + String(MAX_VALUES));
   
   // Initialize Wifi
   setupWiFi();
 
   // Send telemetry (each TIME_TO_SLEEP)
-  Serial.println("Daily avg – Moisture (VWC): " + String(moisturePercent) + "%, Battery (SoC): " + String(batteryPercent) + "%");
+  Serial.println("SEND telemetry: { moisture: " + String(moisturePercent) + "%, battery: " + String(batteryPercent) + "% }");
   sendTelemetry(moisturePercent, batteryPercent);
 
   // Send daily average (once MAX_VALUES readings are collected)
@@ -224,11 +224,12 @@ void setup() {
       sumMoisture += moistureValues[i];
       sumBattery += batteryValues[i];
     }
-    float avgMoisture = sumMoisture / (float)MAX_VALUES;
+    int avgMoisture = sumMoisture / MAX_VALUES;
     int avgBattery = sumBattery / MAX_VALUES;
 
     // Optional: Only send notifications, if values reach a specific point, like (avgMoisture < 20 || avgBattery < 10)
-    String msg = "Bodenfeuchte (VWC): " + String(avgMoisture, 0) + "%, Akkustand (SoC): " + String(avgBattery) + "%";
+    String msg = "Bodenfeuchte (VWC): " + String(avgMoisture) + "%, Akkustand (SoC): " + String(avgBattery) + "%";
+    Serial.println("SEND notification: " + msg);
     sendNotification(msg, "giesbert – Tagesbericht", "[\"droplet\",\"zap\"]");
 
     resetValues();
