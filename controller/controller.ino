@@ -10,10 +10,10 @@
 // ========== NETWORK SETTINGS ==========
 #define PORTAL_TIMEOUT 120 // 120 = 2 minutes
 #define AP_ID "giesbert"
-#define NOTIFY_TOPIC "beispielkanal"   // --> CHANGE ME PLS <--
+#define NOTIFY_TOPIC "beispielkanal" // --> CHANGE ME PLS <--
 #define NOTIFY_URL "https://notify.giesbert.das-habitat.de"
 #define METRICS_URL "https://metrics.giesbert.das-habitat.de/api/v1/import/prometheus"
-#define METRICS_ID "beispielsensor"   // --> CHANGE ME PLS <--
+#define METRICS_ID "beispielsensor" // --> CHANGE ME PLS <--
 
 // ========== MEASUREMENT SETTINGS ==========
 #define TIME_TO_SLEEP 3600 // 300 = 5 minutes, 3600 = 1 hour
@@ -25,7 +25,8 @@ RTC_DATA_ATTR int measureCount = 0;
 RTC_DATA_ATTR int batteryValues[MAX_VALUES];
 RTC_DATA_ATTR int moistureValues[MAX_VALUES];
 
-void resetValues() {
+void resetValues()
+{
   measureCount = 0;
   memset(moistureValues, 0, sizeof(moistureValues));
   memset(batteryValues, 0, sizeof(batteryValues));
@@ -33,14 +34,16 @@ void resetValues() {
 
 // ========== MEASUREMENT FUNCTIONS ==========
 
-float readBatteryVoltage() {
+float readBatteryVoltage()
+{
   // Dummy read then short delay to stabilize the measurement
   analogRead(BATTERY_PIN);
   delay(50);
   const int SAMPLES = 16;
   const int DIVIDER_RATIO = 2; // scale voltage down 1:2
   uint32_t Vbatt = 0;
-  for (int i = 0; i < SAMPLES; i++) {
+  for (int i = 0; i < SAMPLES; i++)
+  {
     Vbatt += analogReadMilliVolts(BATTERY_PIN);
   }
   return DIVIDER_RATIO * Vbatt / SAMPLES / 1000.0;
@@ -51,27 +54,35 @@ float readBatteryVoltage() {
 // * 4.2–4.4 = 80–100%
 // * 3.6-4.2 = 20–80% (long flat nominal discharge)
 // * 3.6–3.0 = 0-20% (fast drop)
-int batteryVoltageToPercent(float voltage) {
-  if (voltage >= 4.5) return 100;
-  if (voltage <= 3.0) return 0;
-  if (voltage > 4.2) return map(voltage * 100, 420, 450, 80, 100);
-  if (voltage > 3.6) return map(voltage * 100, 360, 420, 20, 80);
+int batteryVoltageToPercent(float voltage)
+{
+  if (voltage >= 4.5)
+    return 100;
+  if (voltage <= 3.0)
+    return 0;
+  if (voltage > 4.2)
+    return map(voltage * 100, 420, 450, 80, 100);
+  if (voltage > 3.6)
+    return map(voltage * 100, 360, 420, 20, 80);
   return map(voltage * 100, 300, 360, 0, 20);
 }
 
-float readMoistureVoltage() {
+float readMoistureVoltage()
+{
   // Dummy read then short delay to stabilize the measurement
   analogRead(MOISTURE_PIN);
   delay(50);
   const int SAMPLES = 16;
   uint32_t Vraw = 0;
-  for (int i = 0; i < SAMPLES; i++) {
+  for (int i = 0; i < SAMPLES; i++)
+  {
     Vraw += analogReadMilliVolts(MOISTURE_PIN);
   }
   return Vraw / SAMPLES / 1000.0;
 }
 
-int moistureVoltageToPercent(float voltage) {
+int moistureVoltageToPercent(float voltage)
+{
   const float MIN_V = 0.5;
   const float MAX_V = 2.5;
   float percent = (MAX_V - voltage) / (MAX_V - MIN_V) * 100.0;
@@ -80,7 +91,8 @@ int moistureVoltageToPercent(float voltage) {
 
 // ========== SYSTEM FUNCTIONS ==========
 
-void shutdownAndSleep() {
+void shutdownAndSleep()
+{
   digitalWrite(SENSOR_POWER_PIN, LOW);
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
@@ -91,56 +103,64 @@ void shutdownAndSleep() {
   esp_deep_sleep_start();
 }
 
-void printWakeupReason() {
+void printWakeupReason()
+{
   esp_sleep_wakeup_cause_t reason = esp_sleep_get_wakeup_cause();
-  switch (reason) {
-    case ESP_SLEEP_WAKEUP_TIMER:
-      Serial.println("Wakeup: Timer");
-      break;
-    default:
-      Serial.printf("Wakeup not from timer: %d\n", reason);
-      break;
+  switch (reason)
+  {
+  case ESP_SLEEP_WAKEUP_TIMER:
+    Serial.println("Wakeup: Timer");
+    break;
+  default:
+    Serial.printf("Wakeup not from timer: %d\n", reason);
+    break;
   }
 }
 
 // ========== NETWORK FUNCTIONS ==========
 
-void setupWiFi() {
+void ensureWiFiConnected()
+{
   WiFi.mode(WIFI_STA); // station mode → ESP connects to a router like a client
   WiFi.begin();
   Serial.print("Connecting to WiFi");
   int retries = 0;
-  while (WiFi.status() != WL_CONNECTED && retries < 20) {
+  while (WiFi.status() != WL_CONNECTED && retries < 8)
+  {
     delay(500);
     Serial.print(".");
     retries++;
   }
-  Serial.println();
-  if (WiFi.status() == WL_CONNECTED) {
+  if (WiFi.status() == WL_CONNECTED)
+  {
     Serial.println("WiFi connected: " + WiFi.localIP().toString());
     return;
   }
-  // Start WiFiManager if connection could not be established
+  else if (bootCount > 1)
+  {
+    Serial.println("WiFI not connected. Sleeping...");
+    shutdownAndSleep();
+  }
   // WiFi.mode switches to WIFI_AP → ESP creates its own network for the login portal
   Serial.println("WiFi failed. Starting WiFiManager...");
   WiFiManager wm;
   String apName = String(AP_ID) + " WifiManager";
   wm.setConfigPortalTimeout(PORTAL_TIMEOUT);
   bool response = wm.autoConnect(apName.c_str()); // temporary network without password
-  if (!response) {
+  if (!response)
+  {
     Serial.println("WiFiManager failed or timed out. Sleeping...");
     shutdownAndSleep();
-  } else {
+  }
+  else
+  {
     Serial.println("WiFi connected via WiFiManager.");
     sendNotification("bibup bibup – Gerät erfolgreich eingerichtet.", "giesbert – Setup", "[\"white_check_mark\",\"raised_hands\"]");
   }
 }
 
-void sendNotification(String message, String title, String tags) {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi not connected, skipping notification.");
-    return;
-  }
+int sendNotification(String message, String title, String tags)
+{
   HTTPClient http;
   http.begin(NOTIFY_URL);
   http.addHeader("Content-Type", "application/json");
@@ -154,13 +174,11 @@ void sendNotification(String message, String title, String tags) {
   int httpResponseCode = http.POST(json);
   Serial.println("Notification response: " + String(httpResponseCode));
   http.end();
+  return httpResponseCode;
 }
 
-void sendTelemetry(int moisturePercent, int batteryPercent) {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi not connected, skipping telemetry.");
-    return;
-  }
+void sendTelemetry(int moisturePercent, int batteryPercent)
+{
   HTTPClient http;
   http.begin(METRICS_URL);
   http.addHeader("Content-Type", "text/plain");
@@ -178,7 +196,8 @@ void sendTelemetry(int moisturePercent, int batteryPercent) {
  * 2. Every MAX_VALUES (24h): calculate daily avg, connect to WiFi and send push notification
  * 3. Go back to sleep
  */
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   delay(1000);
 
@@ -205,22 +224,25 @@ void setup() {
   Serial.println("READ battery: " + String(batteryVoltage) + "V (" + String(batteryPercent) + "%)");
 
   // Store in RTC arrays
-  moistureValues[measureCount] = moisturePercent;
-  batteryValues[measureCount] = batteryPercent;
+  int index = measureCount % MAX_VALUES;
+  moistureValues[index] = moisturePercent;
+  batteryValues[index] = batteryPercent;
   measureCount++;
   Serial.println("COUNT measurement: " + String(measureCount) + "/" + String(MAX_VALUES));
-  
-  // Initialize Wifi
-  setupWiFi();
+
+  // Connect to Wifi or showdown and sleep
+  ensureWiFiConnected();
 
   // Send telemetry (each TIME_TO_SLEEP)
   Serial.println("SEND telemetry: { moisture: " + String(moisturePercent) + "%, battery: " + String(batteryPercent) + "% }");
   sendTelemetry(moisturePercent, batteryPercent);
 
   // Send daily average (once MAX_VALUES readings are collected)
-  if (measureCount >= MAX_VALUES) {
+  if (measureCount >= MAX_VALUES)
+  {
     long sumMoisture = 0, sumBattery = 0;
-    for (int i = 0; i < MAX_VALUES; i++) {
+    for (int i = 0; i < MAX_VALUES; i++)
+    {
       sumMoisture += moistureValues[i];
       sumBattery += batteryValues[i];
     }
@@ -230,9 +252,11 @@ void setup() {
     // Optional: Only send notifications, if values reach a specific point, like (avgMoisture < 20 || avgBattery < 10)
     String msg = "Bodenfeuchte (VWC): " + String(avgMoisture) + "%, Akkustand (SoC): " + String(avgBattery) + "%";
     Serial.println("SEND notification: " + msg);
-    sendNotification(msg, "giesbert – Tagesbericht", "[\"droplet\",\"zap\"]");
-
-    resetValues();
+    int notifyResponse = sendNotification(msg, "giesbert – Tagesbericht", "[\"droplet\",\"zap\"]");
+    if (notifyResponse >= 200 && notifyResponse < 300)
+    {
+      resetValues();
+    }
   }
 
   shutdownAndSleep();
