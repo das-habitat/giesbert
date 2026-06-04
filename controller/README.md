@@ -54,13 +54,13 @@ Update your code `moistureVoltageToPercent()`:
 
 ## Components
 
-1. 1x SeedStudio XIAO ESP32-S3
-2. 1x Breadboard
-3. 1x Moisture Sensor
-4. 3x Battery-Case (AAA)
-5. 1x Schottky-Diode
-6. 2x 220 kΩ Resistor
-7. Small items (cable, pins, led, ...)
+* 1x SeedStudio XIAO ESP32-S3
+* 1x Breadboard
+* 1x Moisture Sensor
+* 3x Battery-Case (AAA)
+* 1x Schottky-Diode
+* 2x 220 kΩ Resistor
+* Small items (cable, pins, led, ...)
 
 ---
 
