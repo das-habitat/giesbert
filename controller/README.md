@@ -4,7 +4,7 @@
 
 * 1x SeedStudio XIAO [ESP32-S3](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html)
 * 1x Breadboard
-* 1x [Capacitive Soil Moisture Sensor v2.0](https://www.youtube.com/watch?v=pFQaFnqpOtQ)
+* 1x [Capacitive Soil Moisture Sensor v2.0](https://docs.cirkitdesigner.com/component/20211c29-d8ec-444a-bbf9-fdfb286903ee/capacitive-soil-)
 * 3x Battery-Case (AAA)
 * 1x Schottky-Diode
 * 2x 220 kΩ Resistor
