@@ -1,12 +1,20 @@
 # microCONTROLLER
 
-## Main Technology
+## Components
 
-* [Arduiono IDE](https://docs.arduino.cc/software/ide/)
-* [ESP32-S3](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html)
-* [Capacitive Soil Moisture Sensor v2.0](https://www.youtube.com/watch?v=pFQaFnqpOtQ)
+* 1x SeedStudio XIAO [ESP32-S3](https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/get-started/index.html)
+* 1x Breadboard
+* 1x [Capacitive Soil Moisture Sensor v2.0](https://www.youtube.com/watch?v=pFQaFnqpOtQ)
+* 3x Battery-Case (AAA)
+* 1x Schottky-Diode
+* 2x 220 kΩ Resistor
+* Small items (cable, pins, led, ...)
 
-## How to upload code to the Microcontroller
+For software developing we use [Arduiono IDE](https://docs.arduino.cc/software/ide/) and [VS Code](https://code.visualstudio.com).
+
+## Guides
+
+### 1. Upload code to the microcontroller
 
 Here are the general steps to upload a programm to your microcontroller:
 
@@ -25,7 +33,7 @@ Here are the general steps to upload a programm to your microcontroller:
 5. (Click the RESET button)
 6. Try uploading again
 
-## Moisture Sensor Calibration
+### 2. Calibration of the moisture sensor
 
 The moisture sensor gives you a voltage that decreases as moisture increases. To convert this into a percentage, you need to define two reference points:
 
@@ -33,13 +41,13 @@ The moisture sensor gives you a voltage that decreases as moisture increases. To
 * Wet: The voltage when the sensor is in water or fully saturated soil (corresponds to 100%).
 * These voltages vary slightly between sensors, so calibrating each one improves accuracy.
 
-### Dry measurement
+#### Dry measurement
 
 1. Leave the sensor in air.
 2. Wait a few seconds and note the voltage value printed to the Serial Monitor.
 3. This is your maximum voltage (corresponds to 0% moisture).
 
-### Wet measurement
+#### Wet measurement
 
 1. Insert the sensor tips into very wet soil or a glass of water (only the metal part).
 2. Wait a few seconds and note the voltage value.
@@ -51,18 +59,6 @@ Update your code `moistureVoltageToPercent()`:
   const float MIN_V = 0.5;
   const float MAX_V = 2.5;
 ```
-
-## Components
-
-* 1x SeedStudio XIAO ESP32-S3
-* 1x Breadboard
-* 1x Moisture Sensor
-* 3x Battery-Case (AAA)
-* 1x Schottky-Diode
-* 2x 220 kΩ Resistor
-* Small items (cable, pins, led, ...)
-
----
 
 ## Expand your knowledge
 
