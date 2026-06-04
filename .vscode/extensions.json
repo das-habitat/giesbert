@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools",
+        "bradlc.vscode-tailwindcss",
+        "davidanson.vscode-markdownlint",
+        "ms-azuretools.vscode-docker",
+        "matthewpi.caddyfile-support"
+    ]
+}
