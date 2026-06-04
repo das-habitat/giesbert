@@ -131,6 +131,7 @@ void ensureWiFiConnected()
     Serial.print(".");
     retries++;
   }
+  Serial.println("");
   if (WiFi.status() == WL_CONNECTED)
   {
     Serial.println("WiFi connected: " + WiFi.localIP().toString());
