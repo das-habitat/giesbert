@@ -64,10 +64,24 @@ Update your code `moistureVoltageToPercent()`:
 
 ---
 
-## Miscellaneous
+## Expand your knowledge
 
-* [Microcontroller overview](https://www.youtube.com/watch?v=KzKw_483pbI)
-* [ESP32 overview](https://www.youtube.com/watch?v=CfIjInYch7U)
-* [Getting started](https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/)
+### ESP32
+
+* [ESP32 Models](https://www.youtube.com/watch?v=CfIjInYch7U)
+* [ESP32 Power Modes](https://www.youtube.com/watch?v=DYIlM0nRLT0)
+* [XIAO ESP32_S3](https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/)
+
+### Guides
+
+* [Microcontrollers](https://www.youtube.com/watch?v=KzKw_483pbI)
+* [Multimeters](https://www.youtube.com/watch?v=viitNbwrUMI)
+* [Diodes](https://www.youtube.com/watch?v=QlsEq7cwW6s)
+* [555 Timer](https://www.youtube.com/watch?v=ABWU7FlM1T0)
+* [LoRA (Long Range RAdio)](https://www.youtube.com/watch?v=YQ7aLHCTeeE)
+* [WifiManger](https://www.youtube.com/watch?v=VnfX9YJbaU8)
+
+### Rust
+
 * [Embedded Rust setup #1](https://www.youtube.com/watch?v=TOAynddiu5M)
 * [Embedded Rust setup #2](https://youtu.be/dxgufYRcNDg?t=467)

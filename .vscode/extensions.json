@@ -4,6 +4,7 @@
         "bradlc.vscode-tailwindcss",
         "davidanson.vscode-markdownlint",
         "ms-azuretools.vscode-docker",
-        "matthewpi.caddyfile-support"
+        "matthewpi.caddyfile-support",
+        "ms-vscode.cpptools-extension-pack"
     ]
 }
