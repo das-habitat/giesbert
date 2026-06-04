@@ -22,7 +22,8 @@ Here are the general steps to upload a programm to your microcontroller:
 2. Hold the BOOT button
 3. Plug it back in while still holding BOOT
 4. Release the button after 2 seconds
-5. Try uploading again
+5. (Click the RESET button)
+6. Try uploading again
 
 ## Moisture Sensor Calibration
 
@@ -51,9 +52,19 @@ Update your code `moistureVoltageToPercent()`:
   const float MAX_V = 2.5;
 ```
 
+## Components
+
+1. 1x SeedStudio XIAO ESP32-S3
+2. 1x Breadboard
+3. 1x Moisture Sensor
+4. 3x Battery-Case (AAA)
+5. 1x Schottky-Diode
+6. 2x 220 kΩ Resistor
+7. Small items (cable, pins, led, ...)
+
 ---
 
-## Misc
+## Miscellaneous
 
 * [Microcontroller overview](https://www.youtube.com/watch?v=KzKw_483pbI)
 * [ESP32 overview](https://www.youtube.com/watch?v=CfIjInYch7U)
