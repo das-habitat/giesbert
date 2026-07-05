@@ -10,13 +10,13 @@
 // ========== NETWORK SETTINGS ==========
 #define PORTAL_TIMEOUT 120 // 120 = 2 minutes
 #define AP_ID "giesbert"
-#define NOTIFY_TOPIC "beispielkanal" // --> CHANGE ME PLS <--
+#define NOTIFY_TOPIC "beispielkanal-habitat" // --> CHANGE ME PLS <--
 #define NOTIFY_URL "https://notify.giesbert.das-habitat.de"
 #define METRICS_URL "https://metrics.giesbert.das-habitat.de/api/v1/import/prometheus"
-#define METRICS_ID "beispielsensor" // --> CHANGE ME PLS <--
+#define METRICS_ID "beispielsensor-habitat" // --> CHANGE ME PLS <--
 
 // ========== MEASUREMENT SETTINGS ==========
-#define TIME_TO_SLEEP 3600 // 300 = 5 minutes, 3600 = 1 hour
+#define TIME_TO_SLEEP 60 // 300 = 5 minutes, 3600 = 1 hour
 #define uS_TO_S_FACTOR 1000000ULL
 #define MAX_VALUES 24
 
@@ -83,8 +83,8 @@ float readMoistureVoltage()
 
 int moistureVoltageToPercent(float voltage)
 {
-  const float MIN_V = 0.5;
-  const float MAX_V = 2.5;
+  const float MIN_V = 0.9; // --> CHANGE ME PLS <--
+  const float MAX_V = 2.6; // --> CHANGE ME PLS <--
   float percent = (MAX_V - voltage) / (MAX_V - MIN_V) * 100.0;
   return (int)constrain(percent, 0.0, 100.0);
 }
@@ -199,6 +199,7 @@ void sendTelemetry(int moisturePercent, int batteryPercent)
  */
 void setup()
 {
+  // LEVEL 2 + 3 – Konfiguration
   Serial.begin(115200);
   delay(1000);
 
@@ -211,6 +212,8 @@ void setup()
   pinMode(SENSOR_POWER_PIN, OUTPUT);
   pinMode(MOISTURE_PIN, INPUT);
 
+  // LEVEL 3 – Internet: Dashboard + Notify
+  //
   // Read moisture
   digitalWrite(SENSOR_POWER_PIN, HIGH);
   delay(200);
@@ -265,4 +268,22 @@ void setup()
 
 // loop() is never reached because setup() ends with esp_deep_sleep_start().
 // On wakeup the chip resets and setup() runs again.
-void loop() {}
+void loop()
+{
+  // LEVEL 2 – Werte via Software auslesen
+  //
+  // // Read moisture
+  // digitalWrite(SENSOR_POWER_PIN, HIGH);
+  // delay(1000);
+  // float moistureVoltage = readMoistureVoltage();
+  // int moisturePercent = moistureVoltageToPercent(moistureVoltage);
+  // digitalWrite(SENSOR_POWER_PIN, LOW);
+  // Serial.println("READ moisture: " + String(moistureVoltage) + "V (" + String(moisturePercent) + "%)");
+  //
+  // // Read battery
+  // float batteryVoltage = readBatteryVoltage();
+  // int batteryPercent = batteryVoltageToPercent(batteryVoltage);
+  // Serial.println("READ battery: " + String(batteryVoltage) + "V (" + String(batteryPercent) + "%)");
+  //
+  // delay(1000);
+}

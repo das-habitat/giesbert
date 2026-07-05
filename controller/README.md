@@ -14,6 +14,12 @@ For software developing we use [Arduiono IDE](https://docs.arduino.cc/software/i
 
 ## Guides
 
+### 0. Setup
+
+1. Download Arduino IDE
+2. Install packages: HttpClient, WifiManger
+3. Clip Antenne an ESP32
+
 ### 1. Upload code to the microcontroller
 
 Here are the general steps to upload a programm to your microcontroller:
@@ -66,6 +72,7 @@ Update your code `moistureVoltageToPercent()`:
 
 * [ESP32 Models](https://www.youtube.com/watch?v=CfIjInYch7U)
 * [ESP32 Power Modes](https://www.youtube.com/watch?v=DYIlM0nRLT0)
+* [ESP32 Storage Types](https://www.youtube.com/watch?v=x5ew5GjKLlQ)
 * [XIAO ESP32_S3](https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/)
 
 ### Guides
@@ -73,7 +80,7 @@ Update your code `moistureVoltageToPercent()`:
 * [Microcontrollers](https://www.youtube.com/watch?v=KzKw_483pbI)
 * [Multimeters](https://www.youtube.com/watch?v=viitNbwrUMI)
 * [Diodes](https://www.youtube.com/watch?v=QlsEq7cwW6s)
-* [555 Timer](https://www.youtube.com/watch?v=ABWU7FlM1T0)
+* [Spannungsteiler](https://www.youtube.com/watch?v=v6wyopZCLjU)
 * [LoRA (Long Range RAdio)](https://www.youtube.com/watch?v=YQ7aLHCTeeE)
 * [WifiManger](https://www.youtube.com/watch?v=VnfX9YJbaU8)
 
