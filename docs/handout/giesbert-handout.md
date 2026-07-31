@@ -35,7 +35,7 @@ Willkommen bei Giesbert! In diesem Kurs baust du deinen eigenen Sensor, der miss
 Stell dir Strom wie Wasser vor, das durch ein Rohr fließt:
 
 | Wasser-Bild | Elektrischer Fachbegriff | Einheit |
-|---|---|---|
+| --- | --- | --- |
 | Wasserdruck | **Spannung** (U) | Volt (V) |
 | Wassermenge pro Sekunde | **Stromstärke** (I) | Ampere (A) |
 | Enges Rohr, das bremst | **Widerstand** (R) | Ohm (Ω) |
@@ -114,7 +114,7 @@ Der Microcontroller misst also immer nur die **Hälfte** der tatsächlichen Batt
 5. Vergleiche: War der Unterschied so, wie du es nach der Theorie erwartet hast (trocken = höhere Spannung)?
 
 | Messung | Spannung (V) |
-|---|---|
+| --- | --- |
 | Trocken (an der Luft) | |
 | Nass (Wasser/sehr nasse Erde) | |
 
@@ -135,7 +135,7 @@ Der Microcontroller misst also immer nur die **Hälfte** der tatsächlichen Batt
 4. Vergleiche beide Werte: Ist der zweite Wert ungefähr halb so groß wie der erste?
 
 | Messung | Spannung (V) |
-|---|---|
+| --- | --- |
 | Direkt an der Batterie | |
 | Am Spannungsteiler (mittlerer Punkt) | |
 
@@ -302,7 +302,7 @@ void loop() {
 **Schritt 4 – Werte protokollieren**
 
 | Zustand | Feuchtigkeit (%) |
-|---|---|
+| --- | --- |
 | Trockene Erde | |
 | Feuchte Erde | |
 

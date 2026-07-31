@@ -4,7 +4,7 @@
 
 ## Packages
 
-* [Controller](./controller/README.md)
+* [Controller](./hardware/controller/README.md)
 * [Server](./server/README.md)
 * [Website](./website/README.md)
 
