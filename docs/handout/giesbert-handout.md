@@ -6,8 +6,8 @@ Willkommen bei Giesbert! In diesem Kurs baust du deinen eigenen Sensor, der miss
 
 ## Deine Bauteile
 
-- 1× Mikrocontroller (Seeed XIAO ESP32-S3)
-- 1× Kapazitiver Bodenfeuchtesensor (v2.0)
+- 1× Mikrocontroller ([Seeed XIAO ESP32-S3](https://www.reichelt.de/de/de/shop/produkt/xiao_esp32s3_dual-core_wifi_bt5_0_ohne_header-358354))
+- 1× Kapazitiver Bodenfeuchtesensor ([v2.0](https://www.reichelt.de/de/de/shop/produkt/entwicklerboards_-_feuchtesensor_bodenfeuchte_-223620))
 - 1× Batteriehalter (3xAAA)
 - 1× Schottky-Diode
 - 2× 220kΩ Widerstand
