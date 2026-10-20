@@ -16,6 +16,22 @@
 #define uS_TO_S_FACTOR 1000000ULL
 #define MAX_VALUES 24
 
+// ========== FORWARD DECLARATIONS ==========
+// The Arduino IDE appends the other .ino tabs after this file and does not
+// auto-generate prototypes for functions inside a namespace.
+namespace giesbert
+{
+    void initBattery();
+    float readBatteryVoltage();
+    int batteryVoltageToPercent(float voltage);
+    void initMoisture();
+    float readMoistureVoltage();
+    int moistureVoltageToPercent(float voltage);
+    void shutdownAndSleep();
+    void printWakeupReason();
+    void ensureWiFiConnected();
+}
+
 RTC_DATA_ATTR int bootCount = 0;
 RTC_DATA_ATTR int measureCount = 0;
 RTC_DATA_ATTR int batteryValues[MAX_VALUES];
