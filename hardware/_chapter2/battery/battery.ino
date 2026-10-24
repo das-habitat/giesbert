@@ -27,7 +27,7 @@ void loop()
 {
     const int DIVIDER_RATIO = 2;
     int batteryMilliVoltage = analogReadMilliVolts(BATTERY_PIN);
-    int batteryVoltage = (batteryMilliVoltage * DIVIDER_RATIO) / 1000;
+    float batteryVoltage = (batteryMilliVoltage * DIVIDER_RATIO) / 1000.0;
     float batteryPercent = batteryVoltageToPercent(batteryVoltage);
 
     Serial.print("Spannung: ");
