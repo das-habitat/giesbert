@@ -10,34 +10,49 @@
 * 2x 220 kΩ Resistor
 * Small items (cable, pins, led, ...)
 
-For software developing we use [Arduiono IDE](https://docs.arduino.cc/software/ide/) and [VS Code](https://code.visualstudio.com).
+For software developing we use [Arduino IDE](https://docs.arduino.cc/software/ide/) and [VS Code](https://code.visualstudio.com).
 
 ## Guides
 
 ### 0. Setup
 
-1. Download Arduino IDE
-2. Install packages: HttpClient, WifiManger
-3. Clip Antenne an ESP32
+1. Download and install the [Arduino IDE](https://www.arduino.cc/en/software) (2.x)
+2. Install the board package: *Tools > Board > Boards Manager*, search for `esp32`, install **"esp32" by Espressif Systems**
+3. Install the library: *Tools > Manage Libraries*, search for `WiFiManager`, install **"WiFiManager" by tzapu**
+   * `WiFi.h` and `HTTPClient.h` are part of the esp32 board package – do **not** install a separate "HttpClient" library (the library of that name is a different one; on some systems its `HttpClient.h` can shadow `HTTPClient.h` and break the build)
+4. Clip the antenna onto the ESP32's antenna connector
 
 ### 1. Upload code to the microcontroller
 
-Here are the general steps to upload a programm to your microcontroller:
+Here are the general steps to upload a program to your microcontroller:
 
-1. Connect your XIAO ESP32-S3 to your computer via USB
+1. Connect your XIAO ESP32-S3 to your computer via USB-C. The cable must support data – charge-only cables power the board but no port shows up.
 2. In the Arduino IDE:
-  i) Select the correct board under Tools > Board (the correct board is "XIAO_ESP32-C6")
-  ii) Select the correct port under Tools > Port (this is usually already preselected)
+   1. Select the board under *Tools > Board > esp32 >* **"XIAO_ESP32S3"**
+   2. Select the port under *Tools > Port* (macOS: `/dev/cu.usbmodem…`, Windows: `COM…`). If no such port exists, the board is not detected – try another cable or the BOOT procedure below.
+   3. Check that *Tools > USB CDC On Boot* is **Enabled**, otherwise nothing appears in the Serial Monitor
 3. Click the Upload button
 
-⚠️ If the upload fails because the device is in deep sleep (only if you have programmed it before):
+⚠️ If no port shows up or the upload fails – e.g. because the device is in deep sleep (`controller.ino` puts it to sleep between measurements, which turns its USB port off):
 
 1. Unplug the board
 2. Hold the BOOT button
 3. Plug it back in while still holding BOOT
 4. Release the button after 2 seconds
-5. (Click the RESET button)
-6. Try uploading again
+5. Re-select the port under *Tools > Port* and try uploading again
+6. After the upload, press the RESET button to start the new program
+
+### Check that it works
+
+1. **Upload path:** Upload *File > Examples > 01.Basics > Blink*. The onboard LED blinks.
+2. **Sensors:** Upload [`_chapter2/moisture`](../_chapter2/moisture/moisture.ino) or [`_chapter2/battery`](../_chapter2/battery/battery.ino), open the Serial Monitor at **115200** baud. A new line with voltage and percentage appears every 0.5 s.
+3. **Controller:** Upload `controller.ino` and open the Serial Monitor right away. You should see `Boot #1`, `READ moisture: …`, `READ battery: …` and a WiFi attempt.
+   * On the first boot, the board opens the WiFi network **"giesbert WifiManager"**. Connect to it with a phone within 2 minutes and enter your WiFi credentials. On success, a "giesbert – Setup" push message is sent to `NOTIFY_TOPIC`.
+   * Afterwards the board sleeps for `TIME_TO_SLEEP` seconds between measurements. The Serial Monitor loses its connection while the board sleeps – this is expected.
+4. **Dashboard:** `https://metrics.giesbert.das-habitat.de/vmui/#/?g0.expr={device="<METRICS_ID>"}` shows a new value after every wakeup.
+5. **Push notification:** Subscribe to `https://notify.giesbert.das-habitat.de/<NOTIFY_TOPIC>` (ntfy app or browser). The daily report arrives after `MAX_VALUES` measurements (24 × `TIME_TO_SLEEP`).
+
+The servers can be tested without the board using the scripts in [`_chapter3/`](../_chapter3/).
 
 ### 2. Calibration of the moisture sensor
 
