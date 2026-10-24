@@ -10,7 +10,8 @@
 ### Einrichten
 
 [ ] IDE installieren
-[ ] Packages installieren (HttpClient, WifiManager)
+[ ] Boardpaket "esp32" von Espressif Systems installieren
+[ ] Bibliothek "WiFiManager" von tzapu installieren
 
 ### Messwerte loggen
 
