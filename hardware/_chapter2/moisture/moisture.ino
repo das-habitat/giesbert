@@ -1,4 +1,5 @@
 #define MOISTURE_PIN A1
+#define SENSOR_POWER_PIN D10 // versorgt den Sensor mit Strom
 
 float moistureVoltageToPercent(float voltage)
 {
@@ -11,18 +12,20 @@ float moistureVoltageToPercent(float voltage)
 void setup()
 {
     Serial.begin(115200);
+    pinMode(SENSOR_POWER_PIN, OUTPUT);
+    digitalWrite(SENSOR_POWER_PIN, HIGH); // Sensor einschalten
 }
 
 void loop()
 {
     int moistureMilliVoltage = analogReadMilliVolts(MOISTURE_PIN);
-    int moistureVoltage = moistureMilliVoltage / 1000;
+    float moistureVoltage = moistureMilliVoltage / 1000.0;
     float moisturePercent = moistureVoltageToPercent(moistureVoltage);
 
     Serial.print("Spannung: ");
     Serial.print(moistureVoltage);
     Serial.print(" V  →  Bodenfeuchte: ");
-    Serial.print(percmoisturePercentent);
+    Serial.print(moisturePercent);
     Serial.println(" %");
 
     delay(500);

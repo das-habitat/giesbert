@@ -187,6 +187,7 @@ Mit dem Befehl `analogReadMilliVolts(PIN)` liest der ESP32 die Spannung an einem
 
 ```cpp
 #define MOISTURE_PIN A1
+#define SENSOR_POWER_PIN D10 // versorgt den Sensor mit Strom
 
 float moistureVoltageToPercent(float voltage) {
   const float MIN_V = 0.5; // deine eigene Nass-Messung eintragen
@@ -197,17 +198,19 @@ float moistureVoltageToPercent(float voltage) {
 
 void setup() {
   Serial.begin(115200);
+  pinMode(SENSOR_POWER_PIN, OUTPUT);
+  digitalWrite(SENSOR_POWER_PIN, HIGH); // Sensor einschalten
 }
 
 void loop() {
   int moistureMilliVoltage = analogReadMilliVolts(MOISTURE_PIN);
-  int moistureVoltage = moistureMilliVoltage / 1000;
+  float moistureVoltage = moistureMilliVoltage / 1000.0;
   float moisturePercent = moistureVoltageToPercent(moistureVoltage);
 
   Serial.print("Spannung: ");
   Serial.print(moistureVoltage);
   Serial.print(" V  →  Bodenfeuchte: ");
-  Serial.print(percmoisturePercentent);
+  Serial.print(moisturePercent);
   Serial.println(" %");
 
   delay(500);
@@ -246,7 +249,7 @@ void setup() {
 void loop() {
   const int DIVIDER_RATIO = 2;
   int batteryMilliVoltage = analogReadMilliVolts(BATTERY_PIN);
-  int batteryVoltage = (batteryMilliVoltage * DIVIDER_RATIO) / 1000;
+  float batteryVoltage = (batteryMilliVoltage * DIVIDER_RATIO) / 1000.0;
   float batteryPercent = batteryVoltageToPercent(batteryVoltage);
 
   Serial.print("Spannung: ");
@@ -274,19 +277,11 @@ void loop() {
 **Schritt 1 – ESP32 vorbereiten**
 
 1. Öffne die Arduino IDE.
-2. Prüfe unter *Werkzeuge → Board*, ob das passende XIAO-ESP32-Board ausgewählt ist. Falls das Boardpaket fehlt, installiere es über den *Boardverwalter* (Suchbegriff: "esp32").
-3. Verbinde den ESP32 per USB mit dem PC.
-4. Wähle unter *Werkzeuge → Port* den passenden Port aus (meist schon vorausgewählt).
-5. Klicke auf **Hochladen**.
-
-⚠️ **Falls das Hochladen fehlschlägt** (nur, wenn das Board schon vorher programmiert wurde und in den Tiefschlaf gegangen ist):
-
-1. Board vom USB trennen
-2. BOOT-Taste gedrückt halten
-3. Wieder einstecken, dabei BOOT weiter gedrückt halten
-4. Nach 2 Sekunden loslassen
-5. (Optional: RESET-Taste drücken)
-6. Hochladen erneut versuchen
+2. Falls noch nicht geschehen, installiere das Boardpaket: *Werkzeuge → Board → Boardverwalter*, Suchbegriff `esp32`, installiere **"esp32" von Espressif Systems**.
+3. Wähle unter *Werkzeuge → Board → esp32* das Board **"XIAO_ESP32S3"** aus.
+4. Verbinde den ESP32 per USB-C-Kabel mit dem PC. Das Kabel muss Daten übertragen können – reine Ladekabel versorgen das Board nur mit Strom.
+5. Wähle unter *Werkzeuge → Port* den Port des ESP32 aus (Mac: `/dev/cu.usbmodem…`, Windows: `COM…`). Taucht kein solcher Port auf, wird das Board nicht erkannt – probiere ein anderes Kabel oder die BOOT-Anleitung unten.
+6. Prüfe, dass unter *Werkzeuge → USB CDC On Boot* **Enabled** eingestellt ist – sonst siehst du später nichts im Serial Monitor.
 
 **Schritt 2 – Kalibrierwerte eintragen**
 
@@ -296,8 +291,18 @@ void loop() {
 
 **Schritt 3 – Hochladen und testen**
 
-1. Öffne den **Serial Monitor** (Lupensymbol oben rechts) und stelle die Baudrate auf 115200.
-2. Stecke den Sensor abwechselnd in trockene und feuchte Erde.
+1. Klicke auf **Hochladen** (Pfeil-Symbol oben links) und warte, bis unten "Hochladen abgeschlossen" erscheint.
+2. Öffne den **Serial Monitor** (Lupensymbol oben rechts) und stelle die Baudrate auf 115200. Alle halbe Sekunde sollte eine neue Zeile mit Spannung und Prozentwert erscheinen.
+3. Stecke den Sensor abwechselnd in trockene und feuchte Erde.
+
+⚠️ **Falls kein Port auftaucht oder das Hochladen fehlschlägt** (z. B. weil das Board im Tiefschlaf ist – der Sketch aus Kapitel 3 schickt es zwischen den Messungen schlafen, dabei verschwindet der USB-Port):
+
+1. Board vom USB trennen
+2. BOOT-Taste gedrückt halten
+3. Wieder einstecken, dabei BOOT weiter gedrückt halten
+4. Nach 2 Sekunden loslassen
+5. Port unter *Werkzeuge → Port* erneut auswählen und Hochladen erneut versuchen
+6. Nach dem Hochladen die RESET-Taste drücken, damit das neue Programm startet
 
 **Schritt 4 – Werte protokollieren**
 
@@ -358,9 +363,10 @@ Bevor du etwas programmierst, kannst du die beiden Wege einmal von deinem PC aus
 
 ```bash
 # Push-Nachricht testen
+# Bitte anpassen: DEIN_TOPIC
 curl https://notify.giesbert.das-habitat.de \
   -d '{
-    "topic": "DEIN_TOPIC", # Bitte anpassen
+    "topic": "DEIN_TOPIC",
     "title": "giesbert – Tagesbericht",
     "message": "Bodenfeuchte (VWC): 45%, Akkustand (SoC): 85%",
     "tags": ["droplet", "zap"],
@@ -370,22 +376,26 @@ curl https://notify.giesbert.das-habitat.de \
 
 ```bash
 # Messwert testen
+# Bitte anpassen: DEIN_GERÄTENAME (in beiden Zeilen)
 curl -X POST https://metrics.giesbert.das-habitat.de/api/v1/import/prometheus \
   -H "Content-Type: text/plain" \
-  -d 'moisture_percent{device="DEIN_GERÄTENAME"} 45.2 # Bitte anpassen
+  -d 'moisture_percent{device="DEIN_GERÄTENAME"} 45.2
 battery_percent{device="DEIN_GERÄTENAME"} 85.4' # Bitte anpassen
 ```
 
 **Schritt 2 – WLAN-Funktionalität einbauen**
 
-Nutze jetzt den Sketch `controller.ino` aus dem Kurs und passe die Variablen `NOTIFY_TOPIC`, `METRICS_ID`, `TIME_TO_SLEEP`, `MIN_V` und `MAX_V` an.
+1. Installiere die Bibliothek für die WLAN-Einrichtung: *Werkzeuge → Bibliotheken verwalten*, Suchbegriff `WiFiManager`, installiere **"WiFiManager" von tzapu**. (`WiFi.h` und `HTTPClient.h` sind schon im esp32-Boardpaket enthalten – bitte **keine** zusätzliche Bibliothek "HttpClient" installieren.)
+2. Öffne den Sketch `controller.ino` aus dem Kurs und passe die Variablen `NOTIFY_TOPIC`, `METRICS_ID` und `TIME_TO_SLEEP` (in `controller.ino`) sowie `MIN_V` und `MAX_V` (im Tab `moisture.ino`) an.
 
-**Schritt 6 – Testen**
+**Schritt 3 – Testen**
 
-1. Abonniere im ntfy-App/Browser dein Topic.
-2. Lade den Sketch hoch und beobachte den Serial Monitor.
-3. Schau im Dashboard nach, ob deine Werte ankommen.
-4. Prüfe ebenfalls, ob eine Push-Nachricht angekommen ist.
+1. Abonniere in der ntfy-App oder im Browser dein Topic: `https://notify.giesbert.das-habitat.de/DEIN_TOPIC`
+2. Lade den Sketch hoch und öffne sofort den Serial Monitor. Du solltest `Boot #1`, `READ moisture: …` und `READ battery: …` sehen.
+3. Beim ersten Start öffnet der ESP32 das WLAN **"giesbert WifiManager"**. Verbinde dich innerhalb von 2 Minuten mit dem Handy damit und trage deine WLAN-Zugangsdaten ein. Klappt das, bekommst du die Push-Nachricht "giesbert – Setup".
+4. Danach schläft der ESP32 jeweils `TIME_TO_SLEEP` Sekunden. Währenddessen verliert der Serial Monitor die Verbindung – das ist normal.
+5. Schau im Dashboard nach, ob deine Werte ankommen: `https://metrics.giesbert.das-habitat.de/vmui/#/?g0.expr={device="DEIN_GERÄTENAME"}`
+6. Den Tagesbericht als Push-Nachricht gibt es nach 24 Messungen (24 × `TIME_TO_SLEEP`).
 
 ✅ **Fertig, wenn:** Deine Messwerte im Dashboard erscheinen **und** du eine Push-Nachricht auf dem Handy/Browser bekommst.
 
