@@ -16,6 +16,8 @@ Willkommen bei Giesbert! In diesem Kurs baust du deinen eigenen Sensor, der miss
 - 1× Steckbrett
 - 3x Kabel (Rot, Gelb, Schwarz)
 
+![verkabelung](./verkabelung.png)
+
 ## Was du am Ende kannst
 
 - Spannung und Widerstand mit einem Multimeter messen
