@@ -34,44 +34,48 @@ namespace giesbert
 #define AP_ID "giesbert"
 
     void ensureWiFiConnected()
+{
+    WiFi.mode(WIFI_STA);
+
+    // 1. Versuch: mit gespeicherten Zugangsdaten verbinden
+    WiFi.begin();
+    Serial.print("Connecting to WiFi");
+    int retries = 0;
+    while (WiFi.status() != WL_CONNECTED && retries < 8)
     {
-        WiFi.mode(WIFI_STA); // station mode → ESP connects to a router like a client
-        WiFi.begin();
-        Serial.print("Connecting to WiFi");
-        int retries = 0;
-        while (WiFi.status() != WL_CONNECTED && retries < 8)
-        {
-            delay(500);
-            Serial.print(".");
-            retries++;
-        }
-        Serial.println("");
-        if (WiFi.status() == WL_CONNECTED)
-        {
-            Serial.println("WiFi connected: " + WiFi.localIP().toString());
-            return;
-        }
-        else if (bootCount > 1)
-        {
-            Serial.println("WiFI not connected. Sleeping...");
-            shutdownAndSleep();
-        }
-        // WiFi.mode switches to WIFI_AP → ESP creates its own network for the login portal
-        Serial.println("WiFi failed. Starting WiFiManager...");
-        WiFiManager wm;
-        String apName = String(AP_ID) + " WifiManager";
-        wm.setConfigPortalTimeout(PORTAL_TIMEOUT);
-        bool response = wm.autoConnect(apName.c_str()); // temporary network without password
-        if (!response)
-        {
-            Serial.println("WiFiManager failed or timed out. Sleeping...");
-            shutdownAndSleep();
-        }
-        else
-        {
-            Serial.println("WiFi connected via WiFiManager.");
-            sendNotification("bibup bibup – Gerät erfolgreich eingerichtet.", "giesbert – Setup", "[\"white_check_mark\",\"raised_hands\"]");
-        }
+        delay(500);
+        Serial.print(".");
+        retries++;
     }
+    Serial.println("");
+
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        Serial.println("WiFi connected: " + WiFi.localIP().toString());
+        return;
+    }
+
+    // Kein WLAN: ab dem zweiten Start nur schlafen, kein Portal
+    // (sonst würde der Akku leergesaugt, wenn der Router mal ausfällt)
+    if (bootCount > 1)
+    {
+        Serial.println("WiFi not connected. Sleeping...");
+        shutdownAndSleep();
+    }
+
+    // Erster Start ohne gespeicherte Daten: Portal öffnen
+    Serial.println("WiFi failed. Starting WiFiManager...");
+    WiFi.mode(WIFI_STA);
+    WiFiManager wm;
+    wm.setConfigPortalTimeout(PORTAL_TIMEOUT);
+    if (!wm.autoConnect(AP_ID " WifiManager"))
+    {
+        Serial.println("WiFiManager failed or timed out. Sleeping...");
+        shutdownAndSleep();
+    }
+    Serial.println("WiFi connected via WiFiManager.");
+    sendNotification("bibup bibup – Gerät erfolgreich eingerichtet.",
+                     "giesbert – Setup", "[\"white_check_mark\",\"raised_hands\"]");
+}
 
 }
